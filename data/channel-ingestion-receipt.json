@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "auditedAt": "2026-07-13T20:09:03Z",
+  "channel": {
+    "id": "UCzGcYErpBX4ldvv0l7MWLfw",
+    "handle": "@SaminYasar_",
+    "url": "https://www.youtube.com/@SaminYasar_"
+  },
+  "result": "exhausted_with_metadata_fallback",
+  "privacy": {
+    "publicCatalogItems": 518,
+    "unlistedOwnerItemsStagedPrivately": 15,
+    "unlistedItemsPublished": 0,
+    "thirdPartyPlaylistItemsExcluded": 14,
+    "unavailablePlaylistItemsExcluded": 12
+  },
+  "runBoundary": {
+    "maxWorkers": 5,
+    "maxAttemptsPerItem": 3,
+    "audioOrVideoDownloaded": false
+  },
+  "inventory": {
+    "videos": 92,
+    "shorts": 426,
+    "streamsTabPresent": false,
+    "publicItems": 518,
+    "publicDurationSeconds": 151536,
+    "publicDurationHours": 42.093333
+  },
+  "transcripts": {
+    "captionTracksFetched": 497,
+    "transcriptIndexedSources": 496,
+    "metadataOnlySources": 22,
+    "botChallengeExhausted": 21,
+    "qaRejected": 1,
+    "rawCueCount": 68757,
+    "publishedCueAnchors": 68756,
+    "transcriptChunks": 2479,
+    "indexedSourceDurationSeconds": 150963,
+    "indexedSourceDurationHours": 41.934167,
+    "publicDurationCoverageRatio": 0.996219,
+    "timestampSpanCoverageRatioWithinIndexedSources": 0.999792,
+    "trackLanguages": {
+      "en": 497
+    },
+    "trackKinds": {
+      "asr": 497,
+      "manual": 0
+    }
+  },
+  "qaRejection": {
+    "id": "EocXQhuBCEo",
+    "title": "AI’s value isn’t the tool—it’s the time and money it saves. 📈",
+    "check": "caption timestamp coverage >= 0.8",
+    "observedCoverageRatio": 0.155,
+    "cueCount": 1,
+    "lastEndMs": 3720,
+    "durationSeconds": 24,
+    "disposition": "metadata_only"
+  },
+  "exhausted": [
+    { "id": "sPHkiLdrZmw", "title": "Build AI Agentic Workflows: Content Creator Scraper Tutorial", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "0ksjak-_4qg", "title": "AI Agent Manager: Control Your AI in the Playground", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "DdhKbl3_Zkc", "title": "Unlock AI Power: Gemini 3 & AntiGravity for Work", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "2oFZTvQqeyM", "title": "Agentic Stack: Reclaim Your Time with AI", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "-ebEOkldMoE", "title": "AI Takes Control: Automating Your Business Analysis", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "5PrV1tTkHkY", "title": "Stop AI Automations, Build Agentic Workflows Instead!", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "2ggKRjTyX1Y", "title": "Claude Coworker: AI Data Analysis Made Easy!", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "LQtedqpJ844", "title": "Claude Cowork Skill: New Use Cases Revealed!", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "xrZPS58qaRI", "title": "Build AI Receptionist with Bookedin.ai: Step-by-Step Guide", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "_VR48EYHG3o", "title": "Cloud Code: Your Conversational AI Coding Director", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "PlO89DscwQY", "title": "AI Orchestration: The Future of Doing Less, Achieving More", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "YAQwoAx9t6w", "title": "Dental Whitening Consultation: Samin's Blue Cross Insurance", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "-J743j7bzt8", "title": "Notion & Gemini: Effortless Content Generation Hack", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "Cgr8PCiyP6g", "title": "Claude Coworker: Teach Claude NEW Skills for Actions!", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "WxshV1tZfI4", "title": "Activate Claude Coworker: Your AI Assistant Guide", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "SDpgUWnHApE", "title": "Automate Tasks with Claude AI: A Quick Guide", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "kb0kr3_G7co", "title": "AI Organizes My Messy Desktop Instantly! Claude Cowork Magic", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "CiPAIQgKmYo", "title": "AI Creates Branded Presentation Instantly!", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "kITZQZSwyYg", "title": "Unlock Claude's Power: GitHub Skills for AI Supercharge", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "1vyKwCNjtqo", "title": "Convert Leads to Booked Appointments: No Code Needed!", "attempts": 3, "reason": "youtube_bot_challenge" },
+    { "id": "4eUeRQej5NM", "title": "Build an AI Sales Agent That Never Misses Calls!", "attempts": 3, "reason": "youtube_bot_challenge" }
+  ],
+  "artifacts": {
+    "publicSourceManifest": {
+      "path": ".cache/youtube/audit/sources.json",
+      "bytes": 662684,
+      "sha256": "1063e039c878ad5d059ff1a228d152cb93693dc8bb1544257982d2ce8a73e0a2"
+    },
+    "rawCaptionXmlAggregate": {
+      "files": 497,
+      "bytes": 17203811,
+      "indexSha256": "27fa6df24d0a90083ecd93dbaca97aa85bc6c23ec6059bcee1423f21214b858b"
+    },
+    "rawCueJsonAggregate": {
+      "files": 497,
+      "bytes": 7786938,
+      "indexSha256": "0889ec329ff06e4941a4cb7d9b940745e12538c08dbab0bc0f8fbd0735860f8d"
+    },
+    "chunks": {
+      "path": "data/transcripts/chunks.json",
+      "bytes": 8414906,
+      "sha256": "16835ecb6b0728307fd024494545f2e51f87c961892792f977344aa113d03839"
+    },
+    "catalog": {
+      "path": "data/catalog.generated.json",
+      "bytes": 5235305,
+      "sha256": "b5ca42c9bc2e4ef31420417ca8adf680b59398399b37b98c5dd273b2c9c4e465"
+    },
+    "ingester": {
+      "path": "scripts/ingest-youtube-captions.py",
+      "bytes": 30514,
+      "sha256": "767cb05c12afd1d3a2bcc4091cee8333f9af69acf807e95e586c26e18bd1c323"
+    },
+    "catalogBuilder": {
+      "path": "scripts/build-catalog.mjs",
+      "bytes": 6333,
+      "sha256": "fee1759a3f22afe6ccf2814634686b8dbbefaaa21937db9b0702403b8d4102f2"
+    }
+  },
+  "checks": {
+    "sourceCountMatches": true,
+    "duplicateSourceIds": 0,
+    "orphanChunks": 0,
+    "invalidTimestamps": 0,
+    "compactCueAnchorsValid": true,
+    "unlistedItemsInPublicCatalog": 0,
+    "thirdPartyItemsInPublicCatalog": 0,
+    "contentQa": "pass",
+    "typecheck": "pass",
+    "lint": "pass"
+  }
+}

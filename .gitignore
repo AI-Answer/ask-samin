@@ -1,0 +1,27 @@
+# dependencies and build output
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# local runtime state and imported source files
+.cache/
+.gstack/
+.vercel/
+.env*
+!.env.example
+imports/*
+!imports/.gitkeep
+
+# generated transcript payloads can be rebuilt from creator-owned exports
+data/transcripts/
+
+# operating system
+.DS_Store
+*.log
+
+# language and local tool caches
+__pycache__/
+*.py[cod]
+supabase/.temp/

@@ -1,0 +1,2 @@
+[functions.gte-small]
+verify_jwt = true
