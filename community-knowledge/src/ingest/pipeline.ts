@@ -31,7 +31,12 @@ export async function beginIngestionRun(): Promise<string | null> {
     .select("id")
     .single();
 
-  return error ? null : data.id;
+  if (error) {
+    console.error("beginIngestionRun failed:", error.message, error.code, error.details);
+    return null;
+  }
+
+  return data.id;
 }
 
 export async function heartbeatRun(

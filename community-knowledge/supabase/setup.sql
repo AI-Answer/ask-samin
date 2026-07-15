@@ -731,6 +731,32 @@ comment on table community_knowledge.source_revisions is
   'Immutable prior source versions — auto-populated when content_hash changes.';
 comment on table community_knowledge.media_assets is
   'Per-source media with provider-specific extractability and transcript status.';
+
+-- ---------------------------------------------------------------------------
+-- Service-role write policies (ingestion via PostgREST)
+-- ---------------------------------------------------------------------------
+DO $$
+DECLARE
+  tbl text;
+BEGIN
+  FOREACH tbl IN ARRAY ARRAY[
+    'ingestion_runs', 'raw_snapshots', 'sources', 'chunks',
+    'curriculum_nodes', 'media_assets', 'query_usage_logs',
+    'source_revisions', 'knowledge_packs'
+  ] LOOP
+    EXECUTE format('drop policy if exists "service role full access" on community_knowledge.%I', tbl);
+    EXECUTE format(
+      'create policy "service role full access" on community_knowledge.%I for all to service_role using (true) with check (true)',
+      tbl
+    );
+  END LOOP;
+END $$;
+
+-- Expose schema to PostgREST (also add in Dashboard → API → Exposed schemas):
+-- ALTER ROLE authenticator SET pgrst.db_schemas TO 'public, storage, graphql_public, hubspoke, community_knowledge';
+-- NOTIFY pgrst, 'reload config';
+-- NOTIFY pgrst, 'reload schema';
+
 -- =============================================================================
 -- VERIFY
 -- =============================================================================
