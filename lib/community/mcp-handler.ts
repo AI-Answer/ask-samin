@@ -1,8 +1,6 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 
-import { getRequestIdentity, jsonResponse } from "@/lib/http";
-import { consumeRateLimit } from "@/lib/rate-limit";
 import {
   buildMcpFetchDocument,
   buildMcpSearchResults,
@@ -14,9 +12,6 @@ import {
   listRecentUpdates,
   searchCommunityKnowledge
 } from "@community/search";
-
-export const runtime = "nodejs";
-export const maxDuration = 60;
 
 const httpUrlOutputSchema = z.string().url().refine((value) => {
   const protocol = new URL(value).protocol;
@@ -55,7 +50,7 @@ function toolResult<T extends object>(payload: T) {
   };
 }
 
-const handler = createMcpHandler(
+export const communityMcpHandler = createMcpHandler(
   (server) => {
     server.registerTool(
       "search",
@@ -155,43 +150,6 @@ const handler = createMcpHandler(
       async ({ limit }) => toolResult({ updates: await listRecentUpdates(limit) })
     );
   },
-  { serverInfo: { name: "ask-samin-community", version: "1.0.0" } },
-  {
-    maxDuration: 60,
-    verboseLogs: false,
-    disableSse: true,
-    streamableHttpEndpoint: "/mcp/community"
-  }
+  { serverInfo: { name: "ask-samin", version: "1.0.0" } },
+  { maxDuration: 60, verboseLogs: false, disableSse: true, streamableHttpEndpoint: "/mcp" }
 );
-
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers":
-    "Content-Type, Authorization, MCP-Protocol-Version, MCP-Session-Id, Last-Event-ID",
-  "Access-Control-Expose-Headers": "MCP-Session-Id"
-};
-
-async function withCors(request: Request): Promise<Response> {
-  const rateLimit = consumeRateLimit("mcp-community", getRequestIdentity(request), 120);
-  if (!rateLimit.allowed) {
-    const limited = jsonResponse(
-      { error: "Too many MCP requests. Please retry shortly." },
-      { status: 429, headers: { "Retry-After": String(rateLimit.retryAfterSeconds) } }
-    );
-    const headers = new Headers(limited.headers);
-    for (const [name, value] of Object.entries(CORS_HEADERS)) headers.set(name, value);
-    return new Response(limited.body, { status: limited.status, headers });
-  }
-
-  const response = await handler(request);
-  const headers = new Headers(response.headers);
-  for (const [name, value] of Object.entries(CORS_HEADERS)) headers.set(name, value);
-  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
-}
-
-export function OPTIONS(): Response {
-  return new Response(null, { status: 204, headers: CORS_HEADERS });
-}
-
-export { withCors as GET, withCors as POST, withCors as DELETE };

@@ -26,7 +26,7 @@ export async function GET(): Promise<Response> {
       ingestConfigured: Boolean(getIngestApiKey() && createServerSupabaseClient()),
       readConfigured: isSupabaseReadConfigured(),
       ingestPath: "/api/ingest",
-      mcpPath: "/mcp/community"
+      mcpPath: "/mcp"
     },
     mcp: {
       endpoint: "/mcp",

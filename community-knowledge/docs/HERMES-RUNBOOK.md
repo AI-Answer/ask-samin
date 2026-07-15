@@ -4,8 +4,8 @@
 
 | Surface | URL | Auth |
 |---------|-----|------|
-| **Ingest (write)** | `https://ask-samin.vercel.app/api/ingest` | `Authorization: Bearer <INGEST_API_KEY>` |
-| **MCP (read)** | `https://ask-samin.vercel.app/mcp/community` | None |
+| **Ingest (write)** | `https://ask-samin-ochre.vercel.app/api/ingest` | `Authorization: Bearer <INGEST_API_KEY>` |
+| **MCP (read)** | `https://ask-samin-ochre.vercel.app/mcp` | None |
 
 Also accepts raw `skool_ingest.v1` export JSON (with `pages[]`) — no manual field mapping required.
 
