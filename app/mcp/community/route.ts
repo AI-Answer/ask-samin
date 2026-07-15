@@ -156,7 +156,12 @@ const handler = createMcpHandler(
     );
   },
   { serverInfo: { name: "ask-samin-community", version: "1.0.0" } },
-  { maxDuration: 60, verboseLogs: false, disableSse: true }
+  {
+    maxDuration: 60,
+    verboseLogs: false,
+    disableSse: true,
+    streamableHttpEndpoint: "/mcp/community"
+  }
 );
 
 const CORS_HEADERS = {
