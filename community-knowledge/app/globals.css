@@ -1,0 +1,90 @@
+:root {
+  color-scheme: light dark;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0b0d12;
+  color: #eef2f7;
+}
+
+a {
+  color: #8ec5ff;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.05;
+  margin: 0.5rem 0 1rem;
+}
+
+.eyebrow,
+.note {
+  color: #9aa7b8;
+}
+
+.lede {
+  font-size: 1.05rem;
+  color: #c7d2e0;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.panel {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid #243041;
+  border-radius: 12px;
+  background: #111722;
+}
+
+.endpoint-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.endpoint-row code {
+  word-break: break-all;
+}
+
+.steps {
+  padding-left: 1.25rem;
+}
+
+.facts {
+  display: grid;
+  gap: 1rem;
+}
+
+.facts span {
+  display: block;
+  color: #9aa7b8;
+  font-size: 0.85rem;
+}
+
+.copy-button {
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: inherit;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+}

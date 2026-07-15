@@ -1,0 +1,85 @@
+{
+  "generatedAt": "2026-07-14T00:00:00.000Z",
+  "community": {
+    "slug": "claude-club",
+    "title": "Claude Club (seed demo)"
+  },
+  "curriculumNodes": [
+    {
+      "id": "module_getting_started",
+      "parentId": null,
+      "title": "Getting Started",
+      "slug": "getting-started",
+      "order": 0,
+      "nodeType": "module"
+    },
+    {
+      "id": "lesson_mcp_setup",
+      "parentId": "module_getting_started",
+      "title": "Connect MCP in Claude Desktop",
+      "slug": "connect-mcp-claude-desktop",
+      "order": 0,
+      "nodeType": "lesson",
+      "sourceId": "lesson_mcp_setup"
+    },
+    {
+      "id": "lesson_custom_gpts",
+      "parentId": "module_getting_started",
+      "title": "Custom GPTs vs Projects",
+      "slug": "custom-gpts-vs-projects",
+      "order": 1,
+      "nodeType": "lesson",
+      "sourceId": "lesson_custom_gpts"
+    }
+  ],
+  "sources": [
+    {
+      "id": "lesson_mcp_setup",
+      "sourceType": "lesson_page",
+      "title": "Connect MCP in Claude Desktop",
+      "canonicalUrl": "https://example.com/lessons/mcp-setup",
+      "curriculumPath": ["Getting Started", "Connect MCP in Claude Desktop"],
+      "bodyMarkdown": "# Connect MCP in Claude Desktop\n\nOpen Customize → Connectors, add a custom connector, and paste your MCP URL.\n\nVerify with /mcp in Claude Code terminal.",
+      "videoIds": [],
+      "contentHash": "seed_mcp_setup",
+      "visibility": "published",
+      "extractionStatus": "indexed",
+      "whenToUse": "When a member asks how to connect Claude to a remote MCP server.",
+      "extractedAt": "2026-07-14T00:00:00.000Z",
+      "updatedAt": "2026-07-14T00:00:00.000Z"
+    },
+    {
+      "id": "lesson_custom_gpts",
+      "sourceType": "lesson_page",
+      "title": "Custom GPTs vs Projects",
+      "canonicalUrl": "https://example.com/lessons/custom-gpts",
+      "curriculumPath": ["Getting Started", "Custom GPTs vs Projects"],
+      "bodyMarkdown": "# Custom GPTs vs Projects\n\nCustom GPTs are ChatGPT-hosted apps. Projects are Claude workspaces with files and connectors.",
+      "videoIds": [],
+      "contentHash": "seed_custom_gpts",
+      "visibility": "published",
+      "extractionStatus": "indexed",
+      "whenToUse": "When comparing ChatGPT custom GPTs with Claude Projects.",
+      "extractedAt": "2026-07-14T00:00:00.000Z",
+      "updatedAt": "2026-07-13T00:00:00.000Z"
+    }
+  ],
+  "chunks": [
+    {
+      "id": "lesson_mcp_setup__chunk_0",
+      "sourceId": "lesson_mcp_setup",
+      "chunkIndex": 0,
+      "content": "Connect MCP in Claude Desktop\n\nOpen Customize → Connectors, add a custom connector, and paste your MCP URL.\n\nVerify with /mcp in Claude Code terminal.",
+      "metadata": { "headingPath": ["Connect MCP in Claude Desktop"], "timed": false },
+      "whenToUse": "When a member asks how to connect Claude to a remote MCP server."
+    },
+    {
+      "id": "lesson_custom_gpts__chunk_0",
+      "sourceId": "lesson_custom_gpts",
+      "chunkIndex": 0,
+      "content": "Custom GPTs vs Projects\n\nCustom GPTs are ChatGPT-hosted apps. Projects are Claude workspaces with files and connectors.",
+      "metadata": { "headingPath": ["Custom GPTs vs Projects"], "timed": false },
+      "whenToUse": "When comparing ChatGPT custom GPTs with Claude Projects."
+    }
+  ]
+}
