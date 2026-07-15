@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { isIngestAuthorized } from "../src/ingest/auth";
 import { chunkMarkdown, htmlToMarkdown } from "../src/chunking/markdown";
 import { normalizeLesson } from "../src/ingest/normalize";
 import { buildMcpSearchResults } from "../src/mcp/evidence";
@@ -33,5 +34,29 @@ describe("community-knowledge core", () => {
     expect(search.results.length).toBeGreaterThan(0);
     const mcpResults = buildMcpSearchResults(search.results);
     expect(mcpResults.some((result) => /mcp/i.test(result.text))).toBe(true);
+  });
+});
+
+describe("ingest auth", () => {
+  it("accepts matching bearer token", () => {
+    process.env.INGEST_API_KEY = "test-secret";
+    const request = new Request("http://localhost/api/ingest", {
+      headers: { authorization: "Bearer test-secret" }
+    });
+    expect(isIngestAuthorized(request)).toBe(true);
+    delete process.env.INGEST_API_KEY;
+  });
+
+  it("rejects missing or wrong token", () => {
+    process.env.INGEST_API_KEY = "test-secret";
+    expect(
+      isIngestAuthorized(
+        new Request("http://localhost/api/ingest", {
+          headers: { authorization: "Bearer wrong" }
+        })
+      )
+    ).toBe(false);
+    expect(isIngestAuthorized(new Request("http://localhost/api/ingest"))).toBe(false);
+    delete process.env.INGEST_API_KEY;
   });
 });
