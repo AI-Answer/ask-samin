@@ -1,7 +1,9 @@
 import { promptLedger } from "@/data/prompts";
 import { getCatalog } from "@/lib/catalog";
+import { getIngestApiKey } from "@/lib/community/ingest-auth";
 import { jsonResponse } from "@/lib/http";
 import { isSupabaseSearchConfigured } from "@/lib/search/supabase";
+import { createServerSupabaseClient, isSupabaseReadConfigured } from "@community/db/client";
 
 export const runtime = "nodejs";
 
@@ -19,6 +21,12 @@ export async function GET(): Promise<Response> {
         timestampPolicy: "exact_timed_cue",
         shorts: "browse_only"
       }
+    },
+    community: {
+      ingestConfigured: Boolean(getIngestApiKey() && createServerSupabaseClient()),
+      readConfigured: isSupabaseReadConfigured(),
+      ingestPath: "/api/ingest",
+      mcpPath: "/mcp/community"
     },
     mcp: {
       endpoint: "/mcp",

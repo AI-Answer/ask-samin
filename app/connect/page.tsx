@@ -16,6 +16,7 @@ export default async function ConnectPage() {
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host?.startsWith("localhost") ? "http" : "https");
   const appUrl = (configuredUrl || (host ? `${protocol}://${host}` : "http://localhost:3000")).replace(/\/$/, "");
   const mcpUrl = `${appUrl}/mcp`;
+  const communityMcpUrl = `${appUrl}/mcp/community`;
 
   return (
     <main className="interior-page connect-page" id="main-content">
@@ -75,6 +76,20 @@ export default async function ConnectPage() {
           <CopyButton idleLabel="Copy endpoint" text={mcpUrl} />
         </div>
         <p className="endpoint-note">Use the public HTTPS URL after deployment. Localhost is only for local preview.</p>
+      </section>
+
+      <section className="endpoint-panel" aria-labelledby="community-endpoint-heading">
+        <div className="endpoint-label">
+          <span>SKOOL COMMUNITY MCP</span>
+          <strong id="community-endpoint-heading">Claude Masterclass lessons and transcripts</strong>
+        </div>
+        <div className="endpoint-value">
+          <code>{communityMcpUrl}</code>
+          <CopyButton idleLabel="Copy community endpoint" text={communityMcpUrl} />
+        </div>
+        <p className="endpoint-note">
+          Hybrid search over published Skool course pages. YouTube library tools remain on <code>{mcpUrl}</code>.
+        </p>
       </section>
 
       <div className="connect-layout">

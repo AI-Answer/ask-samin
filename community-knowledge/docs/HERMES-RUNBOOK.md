@@ -4,10 +4,12 @@
 
 | Surface | URL | Auth |
 |---------|-----|------|
-| **Ingest (write)** | `https://<DEPLOYMENT>/api/ingest` | `Authorization: Bearer <INGEST_API_KEY>` |
-| **MCP (read)** | `https://<DEPLOYMENT>/mcp` | None |
+| **Ingest (write)** | `https://ask-samin.vercel.app/api/ingest` | `Authorization: Bearer <INGEST_API_KEY>` |
+| **MCP (read)** | `https://ask-samin.vercel.app/mcp/community` | None |
 
-Local dev: replace host with `http://localhost:3001`.
+Also accepts raw `skool_ingest.v1` export JSON (with `pages[]`) — no manual field mapping required.
+
+Local dev: replace host with `http://localhost:3000`.
 
 ## Environment (Dani / Vercel)
 

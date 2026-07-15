@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@community/*": [
+        "./community-knowledge/src/*"
       ]
     }
   },
@@ -36,6 +39,11 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "community-knowledge/app/**",
+    "community-knowledge/.next/**",
+    "community-knowledge/node_modules/**",
+    "community-knowledge/supabase/**",
+    "supabase/functions/**"
   ]
 }

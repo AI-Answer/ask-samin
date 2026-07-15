@@ -57,16 +57,27 @@ export function normalizeLesson(input: NormalizedLessonInput): {
 
   if (input.transcript) {
     const cues = parseTimestampedTranscript(input.transcript);
-    chunks = chunkTranscriptCues(cues).map((entry) => ({
-      id: `${input.id}__chunk_${entry.chunkIndex}`,
-      sourceId: input.id,
-      chunkIndex: entry.chunkIndex,
-      content: entry.content,
-      metadata: { timed: true },
-      whenToUse,
-      startMs: entry.startMs,
-      endMs: entry.endMs
-    }));
+    if (cues.length > 0) {
+      chunks = chunkTranscriptCues(cues).map((entry) => ({
+        id: `${input.id}__chunk_${entry.chunkIndex}`,
+        sourceId: input.id,
+        chunkIndex: entry.chunkIndex,
+        content: entry.content,
+        metadata: { timed: true },
+        whenToUse,
+        startMs: entry.startMs,
+        endMs: entry.endMs
+      }));
+    } else {
+      chunks = chunkMarkdown(input.transcript).map((entry) => ({
+        id: `${input.id}__chunk_${entry.chunkIndex}`,
+        sourceId: input.id,
+        chunkIndex: entry.chunkIndex,
+        content: entry.content,
+        metadata: { headingPath: entry.headingPath, timed: false },
+        whenToUse
+      }));
+    }
   } else {
     chunks = chunkMarkdown(bodyMarkdown).map((entry) => ({
       id: `${input.id}__chunk_${entry.chunkIndex}`,
