@@ -88,14 +88,14 @@ export function buildMatchReferenceFromSearch(result: SearchResult): MatchRefere
   });
 }
 
-/** Citation block Claude always sees — URL is intentional and unavoidable. */
+/** Citation block Claude always sees — Skool URL is the first line on purpose. */
 export function buildCitationText(input: {
   title: string;
   url: string;
   reference: MatchReference;
   body: string;
 }): string {
-  const lines = [
+  const meta = [
     `[${ATTRIBUTION}]`,
     input.reference.location
       ? `${input.title} — ${input.reference.location}`
@@ -103,13 +103,17 @@ export function buildCitationText(input: {
     input.reference.timestampLabel
       ? `Watch around ${input.reference.timestampLabel}`
       : undefined,
-    input.reference.heading ? `Section: ${input.reference.heading}` : undefined,
-    input.url,
-    "",
-    input.body
+    input.reference.heading ? `Section: ${input.reference.heading}` : undefined
   ].filter((line): line is string => line !== undefined);
 
-  return lines.join("\n").trim();
+  return [
+    input.url,
+    ...meta,
+    "",
+    input.body,
+    "",
+    `Open this Skool lesson: ${input.url}`
+  ].join("\n").trim();
 }
 
 export function selectFetchChunks(

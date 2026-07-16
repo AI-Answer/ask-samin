@@ -77,10 +77,11 @@ describe("mcp reference helpers", () => {
     expect(reference.timestampLabel).toBe("~2:00");
   });
 
-  it("puts Skool URL and attribution into citation text", () => {
+  it("puts Skool URL first in citation text", () => {
+    const url = "https://www.skool.com/claude/classroom/lesson";
     const text = buildCitationText({
       title: "MCP Setup",
-      url: "https://www.skool.com/claude/classroom/lesson",
+      url,
       reference: {
         chunkId: "x",
         location: "Claude Masterclass → Day 03",
@@ -89,10 +90,11 @@ describe("mcp reference helpers", () => {
       body: "Configure the MCP connector."
     });
 
+    expect(text.startsWith(url)).toBe(true);
     expect(text).toContain(`[${ATTRIBUTION}]`);
-    expect(text).toContain("https://www.skool.com/claude/classroom/lesson");
     expect(text).toContain("Watch around ~5:10");
     expect(text).toContain("Configure the MCP connector.");
+    expect(text).toContain(`Open this Skool lesson: ${url}`);
   });
 
   it("caps fetch bodies and windows around the matched chunk", () => {

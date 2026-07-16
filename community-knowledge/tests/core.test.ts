@@ -113,7 +113,7 @@ describe("community-knowledge core", () => {
     expect(mcpResults[0]?.snippet.length).toBeLessThanOrEqual(241);
     expect(mcpResults[0]?.reference.location).toBe("Claude Masterclass → Day 03");
     expect(mcpResults[0]?.reference.timestampLabel).toBe("~5:10");
-    expect(mcpResults[0]?.url).toContain("skool.com");
+    expect(mcpResults[0]?.text.startsWith("https://www.skool.com/claude/classroom/lesson")).toBe(true);
     expect(mcpResults[0]?.text).toContain("https://www.skool.com/claude/classroom/lesson");
     expect(mcpResults[0]?.text).toContain("Samin Yasar / Claude Club");
     expect(mcpResults[0]?.attribution).toBe("Samin Yasar / Claude Club");
