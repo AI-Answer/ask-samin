@@ -11,7 +11,7 @@ DECLARE
 BEGIN
   FOREACH tbl IN ARRAY ARRAY[
     'ingestion_runs', 'raw_snapshots', 'sources', 'chunks',
-    'curriculum_nodes', 'media_assets', 'query_usage_logs',
+    'curriculum_nodes', 'media_assets', 'source_assets', 'query_usage_logs',
     'source_revisions', 'knowledge_packs'
   ] LOOP
     EXECUTE format('drop policy if exists "service role full access" on community_knowledge.%I', tbl);

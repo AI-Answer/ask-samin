@@ -10,6 +10,15 @@ interface SkoolTranscriptRecord {
   method?: string;
 }
 
+interface SkoolResourceRecord {
+  type?: string;
+  file_id?: string;
+  file_name?: string;
+  name?: string;
+  url?: string;
+  link?: string;
+}
+
 interface SkoolPageRecord {
   page_id: string;
   title: string;
@@ -17,6 +26,12 @@ interface SkoolPageRecord {
   course_path?: string[];
   html?: string;
   text?: string;
+  desc_raw?: string;
+  folder?: string;
+  page_type?: string;
+  resources?: unknown;
+  resources_field?: unknown;
+  github_url?: string;
   transcript?: string | SkoolTranscriptRecord | null;
   video?: { url?: string; link?: string; id?: string; external_id?: string } | null;
 }
@@ -24,7 +39,7 @@ interface SkoolPageRecord {
 export interface SkoolIngestExport {
   schema_version?: string;
   community?: string;
-  course?: { short_id?: string };
+  course?: { short_id?: string; title?: string };
   pages: SkoolPageRecord[];
 }
 
@@ -46,12 +61,30 @@ function trimTranscript(text: string, pageId: string): string {
   return text.slice(0, MAX_TRANSCRIPT_CHARS);
 }
 
+function buildCurriculumPath(page: SkoolPageRecord): string[] | undefined {
+  if (page.course_path?.length) return page.course_path;
+  if (page.folder?.trim()) return [page.folder.trim()];
+  return undefined;
+}
+
+function extractGithubUrl(page: SkoolPageRecord): string | undefined {
+  if (page.github_url?.trim()) return page.github_url.trim();
+  const resources = [page.resources_field, page.resources].flatMap((entry) =>
+    Array.isArray(entry) ? entry : []
+  ) as SkoolResourceRecord[];
+  const github = resources.find((resource) =>
+    (resource.url ?? resource.link ?? "").includes("github.com")
+  );
+  return github?.url ?? github?.link;
+}
+
 export function mapSkoolPageToLesson(
   page: SkoolPageRecord,
-  defaults: { groupSlug?: string; courseId?: string } = {}
+  defaults: { groupSlug?: string; courseId?: string; courseTitle?: string } = {}
 ): LessonExport {
   const video = page.video && typeof page.video === "object" ? page.video : {};
   const rawTranscript = transcriptText(page.transcript);
+  const curriculumPath = buildCurriculumPath(page);
   const lesson: LessonExport = {
     id: page.page_id.trim(),
     title: page.title.trim(),
@@ -62,9 +95,18 @@ export function mapSkoolPageToLesson(
     publish: true
   };
 
-  if (page.course_path?.length) {
-    lesson.curriculumPath = page.course_path;
+  if (curriculumPath?.length) {
+    lesson.curriculumPath =
+      defaults.courseTitle && curriculumPath[0] !== defaults.courseTitle
+        ? [defaults.courseTitle, ...curriculumPath]
+        : curriculumPath;
   }
+  if (page.page_type?.trim()) lesson.pageType = page.page_type.trim();
+  if (page.desc_raw?.trim()) lesson.summary = page.desc_raw.trim();
+  if (page.resources_field !== undefined) lesson.resources = page.resources_field;
+  else if (page.resources !== undefined) lesson.resources = page.resources;
+  const githubUrl = extractGithubUrl(page);
+  if (githubUrl) lesson.githubUrl = githubUrl;
   if (rawTranscript) {
     lesson.transcript = trimTranscript(rawTranscript, page.page_id);
   }
@@ -79,7 +121,10 @@ export function mapSkoolPageToLesson(
 export function mapSkoolExportToLessons(exportData: SkoolIngestExport): LessonExport[] {
   const groupSlug = exportData.community?.trim();
   const courseId = exportData.course?.short_id?.trim();
-  return exportData.pages.map((page) => mapSkoolPageToLesson(page, { groupSlug, courseId }));
+  const courseTitle = exportData.course?.title?.trim();
+  return exportData.pages.map((page) =>
+    mapSkoolPageToLesson(page, { groupSlug, courseId, courseTitle })
+  );
 }
 
 export function isSkoolIngestExport(body: unknown): body is SkoolIngestExport {

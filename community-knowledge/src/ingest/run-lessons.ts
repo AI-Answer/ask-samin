@@ -6,7 +6,9 @@ import {
   getExistingContentHash,
   heartbeatRun,
   replaceSourceChunks,
+  replaceSourceAssets,
   saveRawSnapshot,
+  upsertCurriculumNodes,
   upsertMediaAssets,
   upsertSource
 } from "./pipeline";
@@ -24,6 +26,11 @@ export interface LessonExport {
   publish?: boolean;
   groupSlug?: string;
   courseId?: string;
+  pageKind?: import("../types").PageKind;
+  pageType?: string;
+  summary?: string;
+  resources?: unknown;
+  githubUrl?: string;
 }
 
 export interface IngestLessonsResult {
@@ -75,6 +82,11 @@ export async function ingestLessons(
         transcript: lesson.transcript,
         videoLink: lesson.videoLink,
         videoId: lesson.videoId,
+        pageKind: lesson.pageKind,
+        pageType: lesson.pageType,
+        summary: lesson.summary,
+        resources: lesson.resources,
+        githubUrl: lesson.githubUrl,
         groupSlug,
         externalId: lesson.id,
         courseId: lesson.courseId
@@ -99,6 +111,8 @@ export async function ingestLessons(
 
       await upsertSource(source, { publish: lesson.publish });
       await upsertMediaAssets(normalized.mediaAssets);
+      await replaceSourceAssets(source.id, normalized.sourceAssets);
+      await upsertCurriculumNodes(normalized.curriculumNodes);
       await replaceSourceChunks(source.id, normalized.chunks, true, runId);
       processed += 1;
 

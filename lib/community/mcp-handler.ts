@@ -22,23 +22,61 @@ const searchOutputSchema = {
   results: z.array(
     z.object({
       id: z.string(),
+      sourceId: z.string(),
       title: z.string(),
       text: z.string(),
-      url: httpUrlOutputSchema
+      snippet: z.string(),
+      url: httpUrlOutputSchema,
+      curriculumPath: z.array(z.string()),
+      reference: z.object({
+        chunkId: z.string(),
+        location: z.string(),
+        timestampLabel: z.string().optional(),
+        heading: z.string().optional()
+      }),
+      attribution: z.string(),
+      pageKind: z.string().optional(),
+      assets: z.array(
+        z.object({
+          assetType: z.string(),
+          fileId: z.string().optional(),
+          fileName: z.string().optional(),
+          url: z.string().optional()
+        })
+      )
     })
   )
 };
 
 const fetchOutputSchema = {
   id: z.string(),
+  sourceId: z.string(),
   title: z.string(),
   text: z.string(),
   url: httpUrlOutputSchema,
+  curriculumPath: z.array(z.string()),
+  reference: z.object({
+    chunkId: z.string(),
+    location: z.string(),
+    timestampLabel: z.string().optional(),
+    heading: z.string().optional()
+  }),
+  attribution: z.string(),
+  pageKind: z.string().optional(),
+  assets: z.array(
+    z.object({
+      assetType: z.string(),
+      fileId: z.string().optional(),
+      fileName: z.string().optional(),
+      url: z.string().optional()
+    })
+  ),
   metadata: z.object({
     sourceType: z.string(),
-    curriculumPath: z.array(z.string()),
     whenToUse: z.string().optional(),
-    timed: z.boolean()
+    timed: z.boolean(),
+    chunkCount: z.number(),
+    truncated: z.boolean()
   })
 };
 
@@ -57,7 +95,7 @@ export const communityMcpHandler = createMcpHandler(
       {
         title: "Search community knowledge",
         description:
-          "Hybrid search over published Skool lessons, posts, and transcripts. Returns evidence chunks with canonical URLs.",
+          "Search Samin's Claude Club (Skool) lessons. Each result includes attribution, a short summary, the Skool lesson URL, curriculum location, and a timestamp label when the match is from video. Always cite the result url (and timestampLabel when present) in your reply — that Skool link is the CTA.",
         inputSchema: {
           query: z.string().trim().min(1).max(2_000),
           limit: z.number().int().min(1).max(20).default(8),
@@ -90,7 +128,8 @@ export const communityMcpHandler = createMcpHandler(
       "fetch",
       {
         title: "Fetch community evidence",
-        description: "Fetch the matched chunk plus nearby context from the same source.",
+        description:
+          "Fetch a Claude Club lesson by sourceId. Returns a citation header (Samin attribution + Skool URL + location/timestamp) plus a bounded body window. Always include the url in your reply. Prefer search for discovery; use fetch when the member needs more of that specific lesson.",
         inputSchema: { id: z.string().trim().min(1).max(200) },
         outputSchema: fetchOutputSchema,
         annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false }

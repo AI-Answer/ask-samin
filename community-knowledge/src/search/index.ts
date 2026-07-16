@@ -1,5 +1,11 @@
 import { getCurriculumNodes as getSeedCurriculumNodes, listRecentUpdates as listSeedRecentUpdates } from "../catalog";
-import { browseCurriculumFromDb, fetchEvidenceFromDb, listRecentUpdatesFromDb } from "../db/repository";
+import {
+  browseCurriculumFromDb,
+  fetchEvidenceFromDb,
+  getSourceRetrievalMeta,
+  listRecentUpdatesFromDb
+} from "../db/repository";
+import { pickBestResultPerSource } from "../mcp/reference";
 import type { CurriculumNode, FetchResult, SearchResult, SourceType } from "../types";
 import {
   getSeedChunk,
@@ -17,9 +23,31 @@ export interface SearchOptions {
   clientIpHash?: string;
 }
 
+function isRemoteSearchConfigured(): boolean {
+  return Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() &&
+      (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || process.env.SUPABASE_SERVICE_ROLE_KEY?.trim())
+  );
+}
+
+async function enrichSearchResults(results: SearchResult[]): Promise<SearchResult[]> {
+  const meta = await getSourceRetrievalMeta(results.map((result) => result.sourceId));
+  return results.map((result) => {
+    const sourceMeta = meta.get(result.sourceId);
+    if (!sourceMeta) return result;
+    return {
+      ...result,
+      pageKind: sourceMeta.pageKind,
+      assets: sourceMeta.assets
+    };
+  });
+}
+
 async function curriculumNodesForBoost(): Promise<CurriculumNode[]> {
   const fromDb = await browseCurriculumFromDb();
-  return fromDb?.length ? fromDb : getSeedCurriculumNodes();
+  if (fromDb?.length) return fromDb;
+  if (isRemoteSearchConfigured()) return [];
+  return getSeedCurriculumNodes();
 }
 
 function curriculumBoost(query: string, ranked: RankedChunk[], nodes: CurriculumNode[]): RankedChunk[] {
@@ -43,7 +71,7 @@ function curriculumBoost(query: string, ranked: RankedChunk[], nodes: Curriculum
     .sort((left, right) => right.score - left.score || left.chunk.id.localeCompare(right.chunk.id));
 }
 
-function fuseRankedLists(lists: RankedChunk[][], limit: number, rrfK = 60): RankedChunk[] {
+function fuseRankedLists(lists: RankedChunk[][], rrfK = 60): RankedChunk[] {
   const fused = new Map<string, RankedChunk & { fusedScore: number }>();
 
   for (const list of lists) {
@@ -68,8 +96,15 @@ function fuseRankedLists(lists: RankedChunk[][], limit: number, rrfK = 60): Rank
       (left, right) =>
         right.fusedScore - left.fusedScore || left.chunk.id.localeCompare(right.chunk.id)
     )
-    .slice(0, limit)
     .map(({ chunk, source, score }) => ({ chunk, source, score }));
+}
+
+async function finalizeSearchResults(
+  results: SearchResult[],
+  limit: number
+): Promise<SearchResult[]> {
+  const enriched = await enrichSearchResults(results);
+  return pickBestResultPerSource(enriched, limit);
 }
 
 export async function searchCommunityKnowledge(
@@ -80,16 +115,36 @@ export async function searchCommunityKnowledge(
   const limit = Math.min(20, Math.max(1, options.limit ?? 5));
   if (!normalizedQuery) return { mode: "local", results: [] };
 
+  const useRemoteOnly = isRemoteSearchConfigured();
   const boostNodes = await curriculumNodesForBoost();
-  const localRanked = curriculumBoost(
-    normalizedQuery,
-    searchLocalCatalog(normalizedQuery, {
-      limit: limit * 4,
-      sourceType: options.sourceType,
-      curriculumPath: options.curriculumPath
-    }),
-    boostNodes
-  );
+  const localRanked = useRemoteOnly
+    ? []
+    : curriculumBoost(
+        normalizedQuery,
+        searchLocalCatalog(normalizedQuery, {
+          limit: limit * 4,
+          sourceType: options.sourceType,
+          curriculumPath: options.curriculumPath
+        }),
+        boostNodes
+      );
+
+  if (useRemoteOnly) {
+    try {
+      const remoteResults = await searchSupabase(normalizedQuery, {
+        limit: limit * 4,
+        sourceType: options.sourceType,
+        curriculumPath: options.curriculumPath,
+        clientIpHash: options.clientIpHash
+      });
+      return {
+        mode: "hybrid",
+        results: await finalizeSearchResults(remoteResults ?? [], limit)
+      };
+    } catch {
+      return { mode: "hybrid", results: [] };
+    }
+  }
 
   try {
     const remoteResults = await searchSupabase(normalizedQuery, {
@@ -108,7 +163,9 @@ export async function searchCommunityKnowledge(
           chunkIndex: 0,
           content: result.content,
           metadata: result.metadata,
-          whenToUse: result.whenToUse
+          whenToUse: result.whenToUse,
+          startMs: result.startMs,
+          endMs: result.endMs
         },
         source: {
           id: result.sourceId,
@@ -122,12 +179,16 @@ export async function searchCommunityKnowledge(
           visibility: "published",
           extractionStatus: "indexed",
           extractedAt: "",
-          updatedAt: ""
+          updatedAt: "",
+          pageKind: result.pageKind
         }
       }));
 
-      const fused = fuseRankedLists([localRanked, remoteRanked], limit);
-      return { mode: "hybrid", results: rankedToSearchResults(fused) };
+      const fused = fuseRankedLists([localRanked, remoteRanked]);
+      return {
+        mode: "hybrid",
+        results: await finalizeSearchResults(rankedToSearchResults(fused), limit)
+      };
     }
   } catch {
     // Fall back to local seed catalog when Postgres is unavailable.
@@ -135,36 +196,37 @@ export async function searchCommunityKnowledge(
 
   return {
     mode: "local",
-    results: rankedToSearchResults(localRanked.slice(0, limit))
+    results: pickBestResultPerSource(rankedToSearchResults(localRanked), limit)
   };
 }
 
-export async function fetchCommunityEvidence(chunkId: string): Promise<FetchResult | null> {
-  const fromDb = await fetchEvidenceFromDb(chunkId);
+export async function fetchCommunityEvidence(id: string): Promise<FetchResult | null> {
+  const fromDb = await fetchEvidenceFromDb(id);
   if (fromDb) return fromDb;
 
-  const seed = getSeedChunk(chunkId);
-  if (!seed) return null;
+  if (isRemoteSearchConfigured()) return null;
 
-  const nearbyChunks = getSeedSourceChunks(seed.source.id);
-  const index = nearbyChunks.findIndex((chunk) => chunk.id === chunkId);
-  const radius = 1;
-  const slice =
-    index >= 0
-      ? nearbyChunks.slice(Math.max(0, index - radius), Math.min(nearbyChunks.length, index + radius + 1))
-      : [seed.chunk];
+  const seed = getSeedChunk(id);
+  const sourceId = seed?.source.id ?? id;
+  const chunks = getSeedSourceChunks(sourceId);
+  if (chunks.length === 0) return null;
+
+  const source = seed?.source ?? getSeedChunk(chunks[0]!.id)?.source;
+  if (!source) return null;
 
   return {
-    id: chunkId,
-    source: seed.source,
-    chunk: seed.chunk,
-    nearbyChunks: slice
+    id: sourceId,
+    source,
+    chunk: chunks[0]!,
+    nearbyChunks: chunks,
+    assets: []
   };
 }
 
 export async function browseCurriculum(parentId: string | null = null): Promise<CurriculumNode[]> {
   const fromDb = await browseCurriculumFromDb(parentId);
   if (fromDb?.length) return fromDb;
+  if (isRemoteSearchConfigured()) return [];
 
   const nodes = getSeedCurriculumNodes();
   return nodes.filter((node) => (node.parentId ?? null) === parentId);
@@ -173,5 +235,6 @@ export async function browseCurriculum(parentId: string | null = null): Promise<
 export async function listRecentUpdates(limit = 10) {
   const fromDb = await listRecentUpdatesFromDb(limit);
   if (fromDb?.length) return fromDb;
+  if (isRemoteSearchConfigured()) return [];
   return listSeedRecentUpdates(limit);
 }

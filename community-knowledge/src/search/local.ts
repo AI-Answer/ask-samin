@@ -80,18 +80,29 @@ export function searchLocalCatalog(
 }
 
 export function rankedToSearchResults(ranked: RankedChunk[]): SearchResult[] {
-  return ranked.map(({ chunk, source, score }) => ({
-    id: chunk.id,
-    sourceId: source.id,
-    sourceType: source.sourceType,
-    sourceTitle: source.title,
-    canonicalUrl: source.canonicalUrl,
-    curriculumPath: source.curriculumPath,
-    content: chunk.content,
-    whenToUse: chunk.whenToUse ?? source.whenToUse,
-    score,
-    metadata: chunk.metadata
-  }));
+  return ranked.map(({ chunk, source, score }) => {
+    const headingPath = Array.isArray(chunk.metadata.headingPath)
+      ? (chunk.metadata.headingPath as string[])
+      : undefined;
+
+    return {
+      id: chunk.id,
+      sourceId: source.id,
+      sourceType: source.sourceType,
+      sourceTitle: source.title,
+      canonicalUrl: source.canonicalUrl,
+      curriculumPath: source.curriculumPath,
+      content: chunk.content,
+      whenToUse: chunk.whenToUse ?? source.whenToUse,
+      score,
+      metadata: chunk.metadata,
+      pageKind: source.pageKind,
+      matchChunkId: chunk.id,
+      startMs: chunk.startMs,
+      endMs: chunk.endMs,
+      headingPath
+    };
+  });
 }
 
 export function getSeedChunk(chunkId: string): { chunk: CommunityChunk; source: CommunitySource } | null {

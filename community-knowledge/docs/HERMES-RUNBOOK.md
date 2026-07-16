@@ -39,6 +39,10 @@ Hermes receives **only** `INGEST_API_KEY` and the two URLs above.
       "videoLink": "https://home.wistia.com/medias/…",
       "groupSlug": "claude",
       "courseId": "e63905c6",
+      "pageType": "skill_card",
+      "summary": "optional short description",
+      "resources": [{ "type": "zip", "file_id": "…", "file_name": "playwright.zip" }],
+      "githubUrl": "https://github.com/org/repo",
       "publish": true
     }
   ]
@@ -59,12 +63,16 @@ Max 150 lessons per request. Unchanged content is skipped automatically.
 
 ## MCP tools (read-only)
 
-- `search` — `{ "query": "…", "limit": 8 }`
-- `fetch` — `{ "id": "<chunk_id from search>" }`
-- `browse_curriculum` — `{ "parent_id": null }`
+- `search` — `{ "query": "…", "limit": 8 }` → citation `text` (attribution + Skool `url` + location/timestamp + snippet). Always cite `url` in replies.
+- `fetch` — `{ "id": "<sourceId from search>" }` → same citation header + bounded lesson body (truncated if long)
+- `browse_curriculum` — `{ "parent_id": null }` → tree populated at ingest from `curriculumPath`
 - `list_recent_updates` — `{ "limit": 10 }`
 
 Do **not** scrape Skool on every member question. Sync on schedule or when content changes.
+
+## DB migration (one-time)
+
+Apply `community-knowledge/supabase/migrations/20260715000003_catalog_retrieval.sql` on the Supabase project before re-ingesting vault content.
 
 ## curl smoke test
 

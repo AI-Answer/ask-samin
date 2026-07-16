@@ -9,6 +9,15 @@ export type SourceType =
   | "curator_note"
   | "resource_link";
 
+export type PageKind =
+  | "lesson_page"
+  | "skill_card"
+  | "asset_pointer"
+  | "prompt_playbook"
+  | "concept_lesson";
+
+export type SourceAssetType = "zip" | "github" | "url" | "video";
+
 export type SourceVisibility = "private" | "published";
 export type ExtractionStatus = "indexed" | "blocked" | "processing" | "failed";
 
@@ -50,6 +59,17 @@ export interface CommunitySource {
   lastSeenAt?: string;
   removedAt?: string;
   rawSnapshotId?: string;
+  pageKind?: PageKind;
+}
+
+export interface SourceAsset {
+  id: string;
+  sourceId: string;
+  assetType: SourceAssetType;
+  fileId?: string;
+  fileName?: string;
+  url?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface CommunityChunk {
@@ -102,6 +122,12 @@ export interface SearchResult {
   whenToUse?: string;
   score: number;
   metadata: Record<string, unknown>;
+  pageKind?: PageKind;
+  assets?: SourceAsset[];
+  matchChunkId?: string;
+  startMs?: number;
+  endMs?: number;
+  headingPath?: string[];
 }
 
 export interface FetchResult {
@@ -109,6 +135,7 @@ export interface FetchResult {
   source: CommunitySource;
   chunk: CommunityChunk;
   nearbyChunks: CommunityChunk[];
+  assets: SourceAsset[];
 }
 
 export interface CoverageInventoryEntry {

@@ -36,7 +36,9 @@ function rpcRowToRanked(row: {
       chunkIndex: 0,
       content: row.content,
       metadata: row.metadata ?? {},
-      whenToUse: row.when_to_use ?? undefined
+      whenToUse: row.when_to_use ?? undefined,
+      startMs: typeof row.metadata?.startMs === "number" ? row.metadata.startMs : undefined,
+      endMs: typeof row.metadata?.endMs === "number" ? row.metadata.endMs : undefined
     }
   };
 }

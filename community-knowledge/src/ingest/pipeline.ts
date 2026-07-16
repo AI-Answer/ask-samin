@@ -1,6 +1,6 @@
 import { createServerSupabaseClient, createServiceRootClient } from "../db/client";
 import { createEmbeddingsBatch, embeddingToPgVector } from "../embed";
-import type { CommunityChunk, CommunitySource, MediaAsset } from "../types";
+import type { CommunityChunk, CommunitySource, CurriculumNode, MediaAsset, SourceAsset } from "../types";
 import { EMBEDDING_MODEL } from "../types";
 
 const STALE_RUN_MS = 30 * 60 * 1000;
@@ -108,7 +108,8 @@ export async function upsertSource(
     course_id: source.courseId ?? null,
     last_seen_at: source.lastSeenAt ?? now,
     removed_at: source.removedAt ?? null,
-    raw_snapshot_id: source.rawSnapshotId ?? null
+    raw_snapshot_id: source.rawSnapshotId ?? null,
+    page_kind: source.pageKind ?? null
   });
 
   return !error;
@@ -184,6 +185,47 @@ export async function saveRawSnapshot(input: {
     .single();
 
   return error ? null : (data.id as string);
+}
+
+export async function replaceSourceAssets(sourceId: string, assets: SourceAsset[]): Promise<void> {
+  const client = createServerSupabaseClient();
+  if (!client) return;
+
+  await client.from("source_assets").delete().eq("source_id", sourceId);
+  if (assets.length === 0) return;
+
+  await client.from("source_assets").insert(
+    assets.map((asset) => ({
+      id: asset.id,
+      source_id: asset.sourceId,
+      asset_type: asset.assetType,
+      file_id: asset.fileId ?? null,
+      file_name: asset.fileName ?? null,
+      url: asset.url ?? null,
+      metadata: asset.metadata ?? {}
+    }))
+  );
+}
+
+export async function upsertCurriculumNodes(nodes: CurriculumNode[]): Promise<void> {
+  if (nodes.length === 0) return;
+  const client = createServerSupabaseClient();
+  if (!client) return;
+
+  await client.from("curriculum_nodes").upsert(
+    nodes.map((node) => ({
+      id: node.id,
+      parent_id: node.parentId,
+      title: node.title,
+      slug: node.slug,
+      node_order: node.order,
+      node_type: node.nodeType,
+      source_id: node.sourceId ?? null,
+      group_slug: node.groupSlug ?? null,
+      course_id: node.courseId ?? null,
+      external_id: node.externalId ?? null
+    }))
+  );
 }
 
 export async function upsertMediaAssets(assets: MediaAsset[]): Promise<void> {
