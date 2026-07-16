@@ -6,8 +6,10 @@ import { CopyButton } from "@/components/copy-button";
 
 export const metadata: Metadata = {
   title: "Connect your AI",
-  description: "Connect an MCP-compatible AI client to the Ask Samin source library."
+  description: "Connect Ask Samin MCP and the Claude Club skill for Skool-linked answers."
 };
+
+const SKILL_INSTALL_CMD = `npx skills add AI-Answer/ask-samin --skill ask-samin-claude-club -g -a claude-code -y`;
 
 export default async function ConnectPage() {
   const requestHeaders = await headers();
@@ -16,6 +18,7 @@ export default async function ConnectPage() {
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host?.startsWith("localhost") ? "http" : "https");
   const appUrl = (configuredUrl || (host ? `${protocol}://${host}` : "http://localhost:3000")).replace(/\/$/, "");
   const mcpUrl = `${appUrl}/mcp`;
+  const skillZipUrl = `${appUrl}/skills/ask-samin-claude-club.zip`;
 
   return (
     <main className="interior-page connect-page" id="main-content">
@@ -26,8 +29,8 @@ export default async function ConnectPage() {
         </div>
         <div className="intro-aside">
           <p>
-            The standalone site retrieves evidence without running a model. Connect this read-only library to ChatGPT
-            or Claude when you want your signed-in AI client to reason over the transcript context.
+            Connect the Ask Samin library to Claude or ChatGPT. For Claude Club, pair the MCP (retrieval) with the Club
+            skill (always open with the Skool lesson link).
           </p>
           <Link className="intro-link" href="/">
             Try the built-in navigator <span aria-hidden="true">→</span>
@@ -36,59 +39,119 @@ export default async function ConnectPage() {
       </header>
 
       <section className="mcp-definition" aria-labelledby="mcp-definition-heading">
-        <span>MCP, IN PLAIN ENGLISH</span>
+        <span>TWO LAYERS</span>
         <div>
-          <h2 id="mcp-definition-heading">A bridge to tools and context—not another model.</h2>
+          <h2 id="mcp-definition-heading">MCP finds the lesson. The skill formats the answer.</h2>
           <p>
-            MCP stands for Model Context Protocol, an open standard that lets an AI client call external tools. Here,
-            it lets ChatGPT or Claude search and fetch read-only evidence from Samin’s library. It does not provide a
-            model or move your AI account login into this site.
+            <strong>MCP</strong> searches Claude Club and returns Skool URLs, paths, and timestamps.{" "}
+            <strong>Skill</strong> tells Claude to put that Skool link in the first sentence, credit Samin, then
+            summarize. MCP alone is not enough for the retention CTA.
           </p>
         </div>
       </section>
 
-      <section className="connection-facts" aria-label="Ways to use Ask Samin">
-        <article>
-          <span>STANDALONE SITE</span>
-          <strong>Retrieval only</strong>
-          <p>No model runs here, so it uses no model inference tokens. Recommendations are full videos only; Shorts remain in Library browse.</p>
-        </article>
-        <article>
-          <span>CHATGPT</span>
-          <strong>Supported</strong>
-          <p>ChatGPT stays the host and performs inference in the member’s signed-in ChatGPT session.</p>
-        </article>
-        <article>
-          <span>CLAUDE</span>
-          <strong>Supported · beta</strong>
-          <p>Claude can add the same URL as a custom remote MCP connector and handles its own inference.</p>
-        </article>
-      </section>
-
       <section className="endpoint-panel" aria-labelledby="endpoint-heading">
         <div className="endpoint-label">
-          <span>REMOTE ENDPOINT</span>
-          <strong id="endpoint-heading">Paste this into your MCP client</strong>
+          <span>REMOTE MCP</span>
+          <strong id="endpoint-heading">Paste this into your connector</strong>
         </div>
         <div className="endpoint-value">
           <code>{mcpUrl}</code>
-          <CopyButton idleLabel="Copy endpoint" text={mcpUrl} />
+          <CopyButton idleLabel="Copy MCP URL" text={mcpUrl} />
+        </div>
+        <p className="endpoint-note">Read-only search over published Skool lessons and transcripts.</p>
+      </section>
+
+      <section className="endpoint-panel" aria-labelledby="skill-cmd-heading" style={{ marginTop: "1.5rem" }}>
+        <div className="endpoint-label">
+          <span>SKILL · CLAUDE CODE / CURSOR</span>
+          <strong id="skill-cmd-heading">Install with one command</strong>
+        </div>
+        <div className="endpoint-value">
+          <code>{SKILL_INSTALL_CMD}</code>
+          <CopyButton idleLabel="Copy install" text={SKILL_INSTALL_CMD} />
         </div>
         <p className="endpoint-note">
-          Hybrid search over published Skool lessons and transcripts. Use the public HTTPS URL after deployment.
+          Uses the open{" "}
+          <a href="https://github.com/vercel-labs/skills" rel="noreferrer" target="_blank">
+            skills CLI<span className="sr-only">, opens in a new tab</span>
+          </a>
+          . For Cursor, change <code>-a claude-code</code> to <code>-a cursor</code>. Claude.ai members: use the zip
+          below instead.
         </p>
       </section>
 
-      <div className="connect-layout">
+      <section className="claude-connect" aria-labelledby="claude-heading" style={{ marginTop: "2.5rem" }}>
+        <div className="claude-connect-heading">
+          <span className="status-chip">CLAUDE CLUB · RECOMMENDED</span>
+          <div>
+            <span className="eyebrow">Full setup</span>
+            <h2 id="claude-heading">Connect MCP, install skill, then ask.</h2>
+            <p>Do this once. New chats need the Ask Samin connector enabled.</p>
+          </div>
+        </div>
+        <ol>
+          <li>
+            <span>01</span>
+            <p>
+              <strong>Connect MCP</strong> — Customize → Connectors → Add custom connector → name{" "}
+              <code>Ask Samin</code> → paste <code>{mcpUrl}</code> → Add. In a chat: + → Connectors → enable Ask Samin.
+            </p>
+          </li>
+          <li>
+            <span>02</span>
+            <p>
+              <strong>Install skill</strong> — Devs: run the <code>npx skills add …</code> command above. Claude.ai:
+              download{" "}
+              <a href="/skills/ask-samin-claude-club.zip">ask-samin-claude-club.zip</a>, then Settings → Capabilities →
+              Skills → upload/enable the folder.
+            </p>
+          </li>
+          <li>
+            <span>03</span>
+            <p>
+              <strong>Ask</strong> — e.g. “Where does Samin cover the trading use case?” First sentence should be a
+              Skool link, then a short Samin summary. Deeper detail: ask to fetch that lesson.
+            </p>
+          </li>
+        </ol>
+        <div className="claude-team-note">
+          <strong>Pass check</strong>
+          <p>
+            Sentence one contains <code>skool.com/claude/...</code>. If you only get a Day 14–16 essay with no link,
+            the skill is not loaded or MCP is off for that chat.
+          </p>
+        </div>
+        <div className="claude-team-note" style={{ marginTop: "1rem" }}>
+          <strong>Team or Enterprise?</strong>
+          <p>
+            An Owner adds the MCP URL in Organization settings → Connectors; members then enable it under Customize →
+            Connectors. Skill install is still per member (npx or zip).
+          </p>
+        </div>
+        <p className="endpoint-note" style={{ marginTop: "1rem" }}>
+          Zip always available at <a href={skillZipUrl}>{skillZipUrl}</a>
+          {" · "}
+          <a
+            href="https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Official Claude connector guide<span className="sr-only">, opens in a new tab</span>
+          </a>
+        </p>
+      </section>
+
+      <div className="connect-layout" style={{ marginTop: "2.5rem" }}>
         <section className="connection-steps" aria-labelledby="steps-heading">
           <span className="eyebrow">ChatGPT setup</span>
-          <h2 id="steps-heading">Connect once. Then share the build context.</h2>
+          <h2 id="steps-heading">Same MCP endpoint</h2>
           <ol>
             <li>
               <span>01</span>
               <div>
-                <h3>Enable ChatGPT Developer mode</h3>
-                <p>Open Settings → Security and login, then turn on Developer mode. If the toggle is unavailable, your workspace admin must allow it.</p>
+                <h3>Enable Developer mode</h3>
+                <p>Settings → Security and login → Developer mode.</p>
               </div>
             </li>
             <li>
@@ -96,23 +159,30 @@ export default async function ConnectPage() {
               <div>
                 <h3>Create a developer-mode app</h3>
                 <p>
-                  Open Settings → Plugins (or <a href="https://chatgpt.com/plugins" rel="noreferrer" target="_blank">chatgpt.com/plugins<span className="sr-only">, opens in a new tab</span></a>), select plus, then create a developer-mode app and paste <code>{mcpUrl}</code>.
+                  Settings → Plugins (or{" "}
+                  <a href="https://chatgpt.com/plugins" rel="noreferrer" target="_blank">
+                    chatgpt.com/plugins<span className="sr-only">, opens in a new tab</span>
+                  </a>
+                  ) → create app → paste <code>{mcpUrl}</code>.
                 </p>
               </div>
             </li>
             <li>
               <span>03</span>
               <div>
-                <h3>Choose the app in a new chat</h3>
-                <p>
-                  Select + near the composer, choose More, then select Ask Samin. Start with your goal; the guide asks
-                  for your stage, tools, and blocker before recommending full videos.
-                </p>
+                <h3>Use it in chat</h3>
+                <p>Select the Ask Samin app from + → More, then ask for the lesson or timestamp you need.</p>
               </div>
             </li>
           </ol>
-          <a className="guide-link" href="https://developers.openai.com/apps-sdk/deploy/connect-chatgpt" rel="noreferrer" target="_blank">
-            Official ChatGPT setup guide <span aria-hidden="true">→</span><span className="sr-only">, opens in a new tab</span>
+          <a
+            className="guide-link"
+            href="https://developers.openai.com/apps-sdk/deploy/connect-chatgpt"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Official ChatGPT setup guide <span aria-hidden="true">→</span>
+            <span className="sr-only">, opens in a new tab</span>
           </a>
         </section>
 
@@ -129,15 +199,19 @@ export default async function ConnectPage() {
             </div>
             <div>
               <dt>Source evidence</dt>
-              <dd>Returned with titles, URLs, and timestamps when available.</dd>
+              <dd>Returned with titles, Skool URLs, and timestamps when available.</dd>
             </div>
             <div>
               <dt>Your AI account password</dt>
-              <dd><strong>Never sent to this app.</strong></dd>
+              <dd>
+                <strong>Never sent to this app.</strong>
+              </dd>
             </div>
             <div>
               <dt>Your personal API key</dt>
-              <dd><strong>Not required by this MCP server.</strong></dd>
+              <dd>
+                <strong>Not required by this MCP server.</strong>
+              </dd>
             </div>
           </dl>
           <div className="receipt-total">
@@ -147,58 +221,20 @@ export default async function ConnectPage() {
         </aside>
       </div>
 
-      <section className="claude-connect" aria-labelledby="claude-heading">
-        <div className="claude-connect-heading">
-          <span className="status-chip">SUPPORTED · BETA</span>
-          <div>
-            <span className="eyebrow">Claude setup</span>
-            <h2 id="claude-heading">Use the same shelf in Claude.</h2>
-            <p>
-              Custom remote MCP connectors are currently available in beta across Claude plans. Free accounts are
-              limited to one custom connector; Team and Enterprise owners must add it for their organization first.
-            </p>
-          </div>
-        </div>
-        <ol>
-          <li><span>01</span><p>Open <strong>Customize → Connectors</strong>.</p></li>
-          <li><span>02</span><p>Select <strong>+ → Add custom connector</strong>, name it Ask Samin, and paste <code>{mcpUrl}</code>.</p></li>
-          <li><span>03</span><p>Select <strong>Add</strong>. In a chat, open <strong>+ → Connectors</strong> and enable Ask Samin.</p></li>
-          <li>
-            <span>04</span>
-            <p>
-              Install the <strong>Ask Samin Claude Club</strong> skill. Download{" "}
-              <a href="/skills/ask-samin-claude-club.zip">ask-samin-claude-club.zip</a>, enable Skills in Settings →
-              Capabilities, then add/upload the skill. MCP retrieves lessons; the skill forces the Skool link in the
-              first sentence.
-            </p>
-          </li>
-        </ol>
-        <div className="claude-team-note">
-          <strong>Team or Enterprise?</strong>
-          <p>An Owner first adds the URL in Organization settings → Connectors; members then connect it under Customize → Connectors.</p>
-        </div>
-        <a className="guide-link" href="https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp" rel="noreferrer" target="_blank">
-          Official Claude connector guide <span aria-hidden="true">→</span><span className="sr-only">, opens in a new tab</span>
-        </a>
-      </section>
-
       <section className="connect-clarifier" aria-labelledby="clarifier-heading">
         <span aria-hidden="true">!</span>
         <div>
-          <h2 id="clarifier-heading">A useful distinction about “Login with ChatGPT”</h2>
+          <h2 id="clarifier-heading">MCP vs skill</h2>
           <p>
-            A ChatGPT or Claude account is not a transferable API key. With the MCP route, the AI client remains the
-            host, performs inference in the member’s signed-in session, and calls this library as a tool. This app does
-            not capture or reuse the member’s AI account credentials.
-          </p>
-          <p>
-            This production build deliberately uses remote MCP instead of the third-party <a href="https://github.com/opencoredev/login-with-chatgpt" rel="noreferrer" target="_blank">Login with ChatGPT SDK<span className="sr-only">, opens in a new tab</span></a>. That SDK can keep refreshable ChatGPT credentials on an application server and spend the member’s plan; this connector design avoids taking custody of those credentials.
+            Connecting only the MCP lets Claude search Club content — it may still answer without pasting the Skool
+            link. Installing the Club skill is what gatekeeps “link in the first sentence.” Full skill README:{" "}
+            <a href="https://github.com/AI-Answer/ask-samin/tree/main/skills/ask-samin-claude-club" rel="noreferrer" target="_blank">
+              skills/ask-samin-claude-club<span className="sr-only">, opens in a new tab</span>
+            </a>
+            .
           </p>
         </div>
       </section>
-      <p className="plugin-note">
-        This connects a private developer-mode app. Publishing to the plugin directory is a separate, reviewed submission step.
-      </p>
     </main>
   );
 }

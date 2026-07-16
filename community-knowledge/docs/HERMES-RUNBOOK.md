@@ -24,13 +24,22 @@ Set on the deployed app (not in Hermes):
 
 Hermes receives **only** `INGEST_API_KEY` and the two URLs above.
 
-## Member product path (Claude)
+## Member product path (Claude Club)
 
-1. Connect MCP: `https://ask-samin-ochre.vercel.app/mcp`
-2. Install skill: repo folder `skills/ask-samin-claude-club/` (see that README)
-3. Skill enforces: first sentence = Skool URL, then Samin summary; MCP only supplies data
+Full guide: https://ask-samin-ochre.vercel.app/connect
 
-Do not rely on members pasting custom instructions — distribute the skill zip in onboarding.
+1. **MCP** — connect `https://ask-samin-ochre.vercel.app/mcp` (Customize → Connectors)
+2. **Skill**
+   - Claude Code / Cursor:
+     ```bash
+     npx skills add AI-Answer/ask-samin --skill ask-samin-claude-club -g -a claude-code -y
+     ```
+   - Claude.ai — zip: https://ask-samin-ochre.vercel.app/skills/ask-samin-claude-club.zip
+3. **Ask** — e.g. “Where does Samin cover trading?” → first sentence must be the Skool URL
+
+Repo skill docs: `skills/ask-samin-claude-club/README.md`
+
+Do not rely on members pasting custom instructions — distribute the skill (npx or zip).
 
 ## Ingest — POST body
 
