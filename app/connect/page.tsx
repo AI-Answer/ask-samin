@@ -163,6 +163,15 @@ export default async function ConnectPage() {
           <li><span>01</span><p>Open <strong>Customize → Connectors</strong>.</p></li>
           <li><span>02</span><p>Select <strong>+ → Add custom connector</strong>, name it Ask Samin, and paste <code>{mcpUrl}</code>.</p></li>
           <li><span>03</span><p>Select <strong>Add</strong>. In a chat, open <strong>+ → Connectors</strong> and enable Ask Samin.</p></li>
+          <li>
+            <span>04</span>
+            <p>
+              Install the <strong>Ask Samin Claude Club</strong> skill. Download{" "}
+              <a href="/skills/ask-samin-claude-club.zip">ask-samin-claude-club.zip</a>, enable Skills in Settings →
+              Capabilities, then add/upload the skill. MCP retrieves lessons; the skill forces the Skool link in the
+              first sentence.
+            </p>
+          </li>
         </ol>
         <div className="claude-team-note">
           <strong>Team or Enterprise?</strong>

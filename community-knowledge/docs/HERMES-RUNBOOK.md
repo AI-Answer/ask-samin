@@ -24,6 +24,14 @@ Set on the deployed app (not in Hermes):
 
 Hermes receives **only** `INGEST_API_KEY` and the two URLs above.
 
+## Member product path (Claude)
+
+1. Connect MCP: `https://ask-samin-ochre.vercel.app/mcp`
+2. Install skill: repo folder `skills/ask-samin-claude-club/` (see that README)
+3. Skill enforces: first sentence = Skool URL, then Samin summary; MCP only supplies data
+
+Do not rely on members pasting custom instructions — distribute the skill zip in onboarding.
+
 ## Ingest — POST body
 
 ```json
