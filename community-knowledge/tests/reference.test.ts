@@ -65,6 +65,30 @@ describe("mcp reference helpers", () => {
     expect(results[0]?.matchChunkId).toBe("lesson__chunk_1");
   });
 
+  it("demotes Resources companion pages vs teaching lessons", () => {
+    const results = pickBestResultPerSource(
+      [
+        searchResult({
+          sourceId: "resources",
+          id: "resources__chunk_0",
+          matchChunkId: "resources__chunk_0",
+          sourceTitle: "🔗 Resources",
+          score: 1.0
+        }),
+        searchResult({
+          sourceId: "lesson",
+          id: "lesson__chunk_0",
+          matchChunkId: "lesson__chunk_0",
+          sourceTitle: "📝 Give the bot eyes + a simple strategy",
+          score: 0.85
+        })
+      ],
+      2
+    );
+
+    expect(results[0]?.sourceId).toBe("lesson");
+  });
+
   it("builds match references with timestamp labels from timed chunks", () => {
     const reference = buildMatchReference({
       chunkId: "lesson__chunk_0",

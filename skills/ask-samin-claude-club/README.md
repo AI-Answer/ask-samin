@@ -107,8 +107,8 @@ Watch around ~mm:ss if a timestamp was returned.
 
 ### Pass / fail check
 
-- **Pass:** first sentence contains `skool.com/claude/...`
-- **Fail:** long summary of Day 14–16 with no Skool link
+- **Pass:** first sentence is markdown `[title](https://www.skool.com/claude/...)` with a real https URL
+- **Fail:** title-only (“Here’s the lesson: 📝 … — Day 15”) with no `https://www.skool.com/...`
 
 If Ask Samin tools are missing, Claude should tell you to connect the MCP — not invent Club content.
 

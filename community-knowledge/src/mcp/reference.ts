@@ -49,15 +49,32 @@ export function pickBestResultPerSource(results: SearchResult[], limit?: number)
 
   for (const result of results) {
     const current = best.get(result.sourceId);
-    if (!current || result.score > current.score) {
+    if (!current || clubSortScore(result) > clubSortScore(current)) {
       best.set(result.sourceId, result);
     }
   }
 
   const sorted = [...best.values()].sort(
-    (left, right) => right.score - left.score || left.id.localeCompare(right.id)
+    (left, right) =>
+      clubSortScore(right) - clubSortScore(left) || left.id.localeCompare(right.id)
   );
   return typeof limit === "number" ? sorted.slice(0, limit) : sorted;
+}
+
+/** Prefer teaching lessons over companion Resources pages when scores are close. */
+export function clubSortScore(result: SearchResult): number {
+  let score = result.score;
+  const title = result.sourceTitle.normalize("NFKC");
+  if (/^🔗/.test(title) || /\bresources\b/i.test(title)) {
+    score *= 0.55;
+  }
+  if (result.pageKind === "skill_card" || result.pageKind === "concept_lesson") {
+    score *= 1.08;
+  }
+  if (typeof result.startMs === "number") {
+    score *= 1.05;
+  }
+  return score;
 }
 
 export function buildMatchReference(input: {

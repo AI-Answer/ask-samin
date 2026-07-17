@@ -110,16 +110,17 @@ export default async function ConnectPage() {
           <li>
             <span>03</span>
             <p>
-              <strong>Ask</strong> — e.g. “Where does Samin cover the trading use case?” First sentence should be a
-              Skool link, then a short Samin summary. Deeper detail: ask to fetch that lesson.
+              <strong>Ask</strong> — e.g. “Where does Samin cover the trading use case?” First sentence must be
+              markdown <code>[title](https://www.skool.com/...)</code> — not the title alone. Deeper detail: ask to
+              fetch that lesson.
             </p>
           </li>
         </ol>
         <div className="claude-team-note">
           <strong>Pass check</strong>
           <p>
-            Sentence one contains <code>skool.com/claude/...</code>. If you only get a Day 14–16 essay with no link,
-            the skill is not loaded or MCP is off for that chat.
+            Sentence one is <code>[title](https://www.skool.com/claude/...)</code>. Title-only (“Here’s the lesson: 📝 …
+            Day 15”) without an https URL fails.
           </p>
         </div>
         <div className="claude-team-note" style={{ marginTop: "1rem" }}>

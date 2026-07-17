@@ -1,17 +1,21 @@
 # Reply examples
 
-## Good
+## Good (pass)
 
-> Here's the lesson: [🔗 Resources — Day 15](https://www.skool.com/claude/classroom/e63905c6?md=4251d87cc5ad450796922eda58e3cf27).
+> Here's the lesson: [📝 Give the bot eyes + a simple strategy](https://www.skool.com/claude/classroom/e63905c6?md=4ca72ef56dd8419f976bea5968b3de15).
 >
-> This is how Samin covers the trading use case in Claude Club (Claude Masterclass → Day 15 — Give the Bot a Strategy).
+> This is how Samin covers it in Claude Club (Claude Masterclass → Day 15 — Give the Bot a Strategy).
 >
-> You wire Claude Code to an Alpaca **paper** account and use CapitalTrades to mirror congressional trades on a schedule — education/paper only, not live money advice.
+> Copy “smart money” via CapitalTrades into an Alpaca **paper** account — education only.
 >
-> Related setup: [Day 14 — Wire up Alpaca](https://www.skool.com/claude/classroom/e63905c6?md=…).
+> Related: [📂 Day 16 — Run the Wheel](https://www.skool.com/claude/classroom/e63905c6?md=…).
 
-## Bad
+## Bad (fail)
 
-> Found it. In the Masterclass, Day 14 connects Alpaca, Day 15 builds copy-trading with CapitalTrades, Day 16 runs the wheel overnight…
+> Here's the lesson: 📝 Give the bot eyes + a simple strategy — Day 15
 >
-> *(No Skool URL — fails Club retention CTA.)*
+> *(Title only — no `https://www.skool.com/...` — fails Club CTA.)*
+
+> Related: 📂 Day 16 — Run the Wheel Strategy while you sleep
+>
+> *(Related without a clickable Skool URL — also fail.)*

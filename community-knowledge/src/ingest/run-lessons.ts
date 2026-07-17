@@ -42,7 +42,7 @@ export interface IngestLessonsResult {
 
 export async function ingestLessons(
   lessons: LessonExport[],
-  options: { fetchMethod?: string; groupSlug?: string } = {}
+  options: { fetchMethod?: string; groupSlug?: string; force?: boolean } = {}
 ): Promise<IngestLessonsResult> {
   if (lessons.length === 0) {
     throw new Error("At least one lesson is required.");
@@ -50,6 +50,7 @@ export async function ingestLessons(
 
   const groupSlug = options.groupSlug ?? process.env.COMMUNITY_SLUG ?? lessons[0]?.groupSlug;
   const fetchMethod = options.fetchMethod ?? "export";
+  const force = options.force === true;
   const runId = await beginIngestionRun();
   if (!runId) {
     throw new Error("Could not start ingestion run — is Supabase configured?");
@@ -92,10 +93,12 @@ export async function ingestLessons(
         courseId: lesson.courseId
       });
 
-      const existingHash = await getExistingContentHash(lesson.id);
-      if (existingHash === normalized.source.contentHash) {
-        skipped += 1;
-        continue;
+      if (!force) {
+        const existingHash = await getExistingContentHash(lesson.id);
+        if (existingHash === normalized.source.contentHash) {
+          skipped += 1;
+          continue;
+        }
       }
 
       const now = new Date().toISOString();

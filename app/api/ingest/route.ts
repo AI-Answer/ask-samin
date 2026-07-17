@@ -39,6 +39,10 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
+  const record = payload && typeof payload === "object" ? (payload as { force?: unknown }) : null;
+  const force =
+    record?.force === true || new URL(request.url).searchParams.get("force") === "1";
+
   const parsed = ingestLessonsSchema.safeParse(lessons);
   if (!parsed.success) {
     return jsonResponse(
@@ -48,8 +52,8 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   try {
-    const result = await ingestLessons(parsed.data, { fetchMethod: "api" });
-    return jsonResponse({ ok: true, ...result });
+    const result = await ingestLessons(parsed.data, { fetchMethod: "api", force });
+    return jsonResponse({ ok: true, force, ...result });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Ingestion failed";
     return jsonResponse({ ok: false, error: message }, { status: 500 });

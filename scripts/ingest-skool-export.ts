@@ -9,15 +9,17 @@ const DEFAULT_BATCH = 10;
 async function postBatch(
   baseUrl: string,
   apiKey: string,
-  lessons: ReturnType<typeof mapSkoolExportToLessons>
+  lessons: ReturnType<typeof mapSkoolExportToLessons>,
+  force: boolean
 ): Promise<{ processed: number; skipped: number; runId?: string }> {
-  const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/ingest`, {
+  const url = `${baseUrl.replace(/\/$/, "")}/api/ingest${force ? "?force=1" : ""}`;
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ lessons })
+    body: JSON.stringify({ lessons, force })
   });
 
   const payload = (await response.json()) as {
@@ -50,13 +52,16 @@ function chunk<T>(items: T[], size: number): T[][] {
 async function main(): Promise<void> {
   const inputPath = process.argv[2];
   if (!inputPath) {
-    console.error("Usage: tsx scripts/ingest-skool-export.ts <export.json> [--batch=10] [--url=...]");
+    console.error(
+      "Usage: tsx scripts/ingest-skool-export.ts <export.json> [--batch=10] [--url=...] [--force] [--local]"
+    );
     process.exit(1);
   }
 
   const batchArg = process.argv.find((arg) => arg.startsWith("--batch="));
   const urlArg = process.argv.find((arg) => arg.startsWith("--url="));
   const local = process.argv.includes("--local");
+  const force = process.argv.includes("--force");
   const batchSize = batchArg ? Number(batchArg.split("=")[1]) : DEFAULT_BATCH;
   const baseUrl =
     urlArg?.split("=")[1] ??
@@ -79,6 +84,7 @@ async function main(): Promise<void> {
         source: inputPath,
         lessons: lessons.length,
         batches: batches.length,
+        force,
         mode: local ? "local" : "http",
         target: local ? "direct-ingestLessons()" : `${baseUrl}/api/ingest`
       },
@@ -92,8 +98,8 @@ async function main(): Promise<void> {
 
   for (const [index, batch] of batches.entries()) {
     const result = local
-      ? await ingestLessons(batch, { fetchMethod: "skool-export" })
-      : await postBatch(baseUrl, apiKey!, batch);
+      ? await ingestLessons(batch, { fetchMethod: "skool-export", force })
+      : await postBatch(baseUrl, apiKey!, batch, force);
     processed += result.processed;
     skipped += result.skipped;
     console.log(
@@ -108,7 +114,7 @@ async function main(): Promise<void> {
     );
   }
 
-  console.log(JSON.stringify({ ok: true, processed, skipped, total: lessons.length }, null, 2));
+  console.log(JSON.stringify({ ok: true, processed, skipped, total: lessons.length, force }, null, 2));
 }
 
 main().catch((error) => {
