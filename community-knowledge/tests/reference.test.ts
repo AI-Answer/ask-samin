@@ -65,7 +65,7 @@ describe("mcp reference helpers", () => {
     expect(results[0]?.matchChunkId).toBe("lesson__chunk_1");
   });
 
-  it("demotes Resources companion pages vs teaching lessons", () => {
+  it("ranks by relevance without demoting Resources titles", () => {
     const results = pickBestResultPerSource(
       [
         searchResult({
@@ -86,7 +86,8 @@ describe("mcp reference helpers", () => {
       2
     );
 
-    expect(results[0]?.sourceId).toBe("lesson");
+    expect(results[0]?.sourceId).toBe("resources");
+    expect(results[1]?.sourceId).toBe("lesson");
   });
 
   it("builds match references with timestamp labels from timed chunks", () => {

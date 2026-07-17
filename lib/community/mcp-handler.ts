@@ -95,7 +95,7 @@ export const communityMcpHandler = createMcpHandler(
       {
         title: "Search community knowledge",
         description:
-          "Search Claude Club (Skool) lessons. Returns sourceId, title, url, curriculumPath, reference (location/timestamp), snippet, and citation text. Prefer main lesson pages over Resources companions.",
+          "Search Claude Club (Skool) lessons. Returns sourceId, title, url, curriculumPath, reference (location/timestamp), snippet, and citation text. Ranked by relevance across all Club courses in the index.",
         inputSchema: {
           query: z.string().trim().min(1).max(2_000),
           limit: z.number().int().min(1).max(20).default(8),
@@ -192,7 +192,7 @@ export const communityMcpHandler = createMcpHandler(
   {
     serverInfo: { name: "ask-samin", version: "1.0.0" },
     instructions:
-      "Ask Samin retrieves Samin Yasar's Claude Club (Skool) lessons. Return urls, paths, and timestamps for the Club skill to format. Prefer teaching lessons over Resources companion pages."
+      "Ask Samin retrieves Samin Yasar's Claude Club (Skool) lessons across whatever courses are indexed. Return urls, paths, and timestamps for the Club skill to format. Do not invent Club structure rules."
   },
   { maxDuration: 60, verboseLogs: false, disableSse: true, streamableHttpEndpoint: "/mcp" }
 );

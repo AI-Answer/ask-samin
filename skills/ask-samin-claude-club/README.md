@@ -88,10 +88,12 @@ npx skills add AI-Answer/ask-samin --list
 
 | You ask | What should happen |
 |---------|-------------------|
-| “Where does Samin cover the trading use case?” | `search` → Skool link in sentence 1 → short summary |
-| “How do I connect an MCP the way Samin teaches?” | Same, Masterclass lesson URL first |
-| “Find the Alpaca paper trading lesson” | Link + Day path + summary |
+| “Where does Samin cover the trading use case?” | `search` → top hit Skool link in sentence 1 → summary → Related if other hits help |
+| “How do I connect an MCP the way Samin teaches?” | Same — whichever Club page ranks highest |
+| “Find the Alpaca paper trading lesson” | Link + path from tools + summary |
 | “Go deeper on that lesson” | `fetch` with `sourceId` → more body, still lead with URL |
+
+The skill does **not** hardcode course layout (Masterclass vs Vault vs Hermes, Resources vs lesson). Ranking comes from search; Related links come from other strong results.
 
 ### Expected reply shape
 
@@ -103,6 +105,8 @@ This is how Samin covers it in Claude Club (path…).
 Short useful summary…
 
 Watch around ~mm:ss if a timestamp was returned.
+
+Related: [other title](https://www.skool.com/...) — when other hits are useful
 ```
 
 ### Pass / fail check

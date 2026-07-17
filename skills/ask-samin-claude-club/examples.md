@@ -1,6 +1,6 @@
 # Reply examples
 
-## Good (pass)
+## Good (pass) — top hit + Related from search
 
 > Here's the lesson: [📝 Give the bot eyes + a simple strategy](https://www.skool.com/claude/classroom/e63905c6?md=4ca72ef56dd8419f976bea5968b3de15).
 >
@@ -8,7 +8,9 @@
 >
 > Copy “smart money” via CapitalTrades into an Alpaca **paper** account — education only.
 >
-> Related: [📂 Day 16 — Run the Wheel](https://www.skool.com/claude/classroom/e63905c6?md=…).
+> Related: [🔗 Resources](https://www.skool.com/claude/classroom/e63905c6?md=…) — prompts and links for the same day.
+>
+> Related: [Other matching Club page](https://www.skool.com/claude/classroom/…) — only if search returned another strong hit (including another course).
 
 ## Bad (fail)
 

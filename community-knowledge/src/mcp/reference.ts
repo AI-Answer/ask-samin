@@ -61,13 +61,9 @@ export function pickBestResultPerSource(results: SearchResult[], limit?: number)
   return typeof limit === "number" ? sorted.slice(0, limit) : sorted;
 }
 
-/** Prefer teaching lessons over companion Resources pages when scores are close. */
+/** Light quality boosts only — no Club-structure heuristics (Resources vs lesson, course names). */
 export function clubSortScore(result: SearchResult): number {
   let score = result.score;
-  const title = result.sourceTitle.normalize("NFKC");
-  if (/^🔗/.test(title) || /\bresources\b/i.test(title)) {
-    score *= 0.55;
-  }
   if (result.pageKind === "skill_card" || result.pageKind === "concept_lesson") {
     score *= 1.08;
   }
