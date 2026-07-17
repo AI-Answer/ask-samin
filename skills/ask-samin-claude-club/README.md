@@ -1,11 +1,11 @@
 # Ask Samin — Claude Club skill
 
-Teaches Claude **how to answer** using the Ask Samin MCP: always open with the Skool lesson link, credit Samin, then summarize.
+Teaches Claude to answer with **Samin Yasar’s approach in Claude Club**: always open with the Skool https link, credit Samin, then summarize from Ask Samin evidence.
 
 | Layer | Job |
 |--------|-----|
-| **MCP** | Retrieve lessons, URLs, timestamps from Claude Club |
-| **Skill** | Gatekeep reply format (link first) + when to call tools |
+| **MCP** | Retrieve Claude Club pages, URLs, timestamps |
+| **Skill** | Gatekeep reply format (link first) + search Claude Club first |
 
 ---
 
@@ -88,19 +88,19 @@ npx skills add AI-Answer/ask-samin --list
 
 | You ask | What should happen |
 |---------|-------------------|
-| “Where does Samin cover the trading use case?” | `search` → top hit Skool link in sentence 1 → summary → Related if other hits help |
-| “How do I connect an MCP the way Samin teaches?” | Same — whichever Club page ranks highest |
-| “Find the Alpaca paper trading lesson” | Link + path from tools + summary |
+| “Where does Samin cover the trading use case?” | `search` → top hit Skool link in sentence 1 → Samin’s approach summary → Related if useful |
+| “How do I connect an MCP the way Samin teaches?” | Same — highest-ranked Claude Club page |
+| “How do I install Claude on a VPS?” | `search` Claude Club first; if nothing matches, say so (don’t invent a URL) |
 | “Go deeper on that lesson” | `fetch` with `sourceId` → more body, still lead with URL |
 
-The skill does **not** hardcode course layout (Masterclass vs Vault vs Hermes, Resources vs lesson). Ranking comes from search; Related links come from other strong results.
+After the skill loads, it should **search Claude Club on every how-to turn** unless the member asks for generic (non–Claude Club) advice. It does **not** hardcode course layout.
 
 ### Expected reply shape
 
 ```text
-[Skool URL as markdown link — FIRST sentence]
+Here's where Samin covers this in Claude Club: [title](https://www.skool.com/...)
 
-This is how Samin covers it in Claude Club (path…).
+This is Samin’s approach in Claude Club (path…).
 
 Short useful summary…
 
@@ -114,11 +114,11 @@ Related: [other title](https://www.skool.com/...) — when other hits are useful
 - **Pass:** first sentence is markdown `[title](https://www.skool.com/claude/...)` with a real https URL
 - **Fail:** title-only (“Here’s the lesson: 📝 … — Day 15”) with no `https://www.skool.com/...`
 
-If Ask Samin tools are missing, Claude should tell you to connect the MCP — not invent Club content.
+If Ask Samin tools are missing, Claude should tell you to connect the MCP — not invent Claude Club content.
 
 ---
 
-## Club ops: what to send members
+## Claude Club ops: what to send members
 
 **Minimum handoff**
 

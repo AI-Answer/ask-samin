@@ -29,8 +29,8 @@ export default async function ConnectPage() {
         </div>
         <div className="intro-aside">
           <p>
-            Connect the Ask Samin library to Claude or ChatGPT. For Claude Club, pair the MCP (retrieval) with the Club
-            skill (always open with the Skool lesson link).
+            Connect the Ask Samin library to Claude or ChatGPT. For Claude Club, pair the MCP (retrieval) with the Claude
+            Club skill (always open with Samin’s Skool link).
           </p>
           <Link className="intro-link" href="/">
             Try the built-in navigator <span aria-hidden="true">→</span>
@@ -44,8 +44,8 @@ export default async function ConnectPage() {
           <h2 id="mcp-definition-heading">MCP finds the lesson. The skill formats the answer.</h2>
           <p>
             <strong>MCP</strong> searches Claude Club and returns Skool URLs, paths, and timestamps.{" "}
-            <strong>Skill</strong> tells Claude to put that Skool link in the first sentence, credit Samin, then
-            summarize. MCP alone is not enough for the retention CTA.
+            <strong>Skill</strong> tells Claude to put that Skool link in the first sentence, credit Samin’s Claude Club
+            approach, then summarize. MCP alone is not enough for the retention CTA.
           </p>
         </div>
       </section>
@@ -227,8 +227,9 @@ export default async function ConnectPage() {
         <div>
           <h2 id="clarifier-heading">MCP vs skill</h2>
           <p>
-            Connecting only the MCP lets Claude search Club content — it may still answer without pasting the Skool
-            link. Installing the Club skill is what gatekeeps “link in the first sentence.” Full skill README:{" "}
+            Connecting only the MCP lets Claude search Claude Club content — it may still answer without pasting the
+            Skool link. Installing the Claude Club skill is what gatekeeps “link in the first sentence.” Full skill
+            README:{" "}
             <a href="https://github.com/AI-Answer/ask-samin/tree/main/skills/ask-samin-claude-club" rel="noreferrer" target="_blank">
               skills/ask-samin-claude-club<span className="sr-only">, opens in a new tab</span>
             </a>

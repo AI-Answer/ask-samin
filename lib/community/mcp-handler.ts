@@ -95,7 +95,7 @@ export const communityMcpHandler = createMcpHandler(
       {
         title: "Search community knowledge",
         description:
-          "Search Claude Club (Skool) lessons. Returns sourceId, title, url, curriculumPath, reference (location/timestamp), snippet, and citation text. Ranked by relevance across all Club courses in the index.",
+          "Search Samin Yasar's Claude Club (Skool) lessons. Returns sourceId, title, url, curriculumPath, reference (location/timestamp), snippet, and citation text. Ranked by relevance across indexed Claude Club courses.",
         inputSchema: {
           query: z.string().trim().min(1).max(2_000),
           limit: z.number().int().min(1).max(20).default(8),
@@ -129,7 +129,7 @@ export const communityMcpHandler = createMcpHandler(
       {
         title: "Fetch community evidence",
         description:
-          "Fetch a Claude Club lesson by sourceId. Returns url, location/timestamp reference, and a bounded body. Prefer search for discovery.",
+          "Fetch a Claude Club page by sourceId (Samin's Skool content). Returns url, location/timestamp reference, and a bounded body. Prefer search for discovery.",
         inputSchema: { id: z.string().trim().min(1).max(200) },
         outputSchema: fetchOutputSchema,
         annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false }
@@ -192,7 +192,7 @@ export const communityMcpHandler = createMcpHandler(
   {
     serverInfo: { name: "ask-samin", version: "1.0.0" },
     instructions:
-      "Ask Samin retrieves Samin Yasar's Claude Club (Skool) lessons across whatever courses are indexed. Return urls, paths, and timestamps for the Club skill to format. Do not invent Club structure rules."
+      "Ask Samin retrieves Samin Yasar's Claude Club (Skool) lessons across whatever courses are indexed. Return urls, paths, and timestamps so the Claude Club skill can credit Samin and link to Skool. Do not invent Claude Club structure rules."
   },
   { maxDuration: 60, verboseLogs: false, disableSse: true, streamableHttpEndpoint: "/mcp" }
 );
