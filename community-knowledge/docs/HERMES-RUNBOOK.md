@@ -32,12 +32,13 @@ Full guide: https://ask-samin-ochre.vercel.app/connect
 2. **Skill**
    - Claude Code / Cursor:
      ```bash
-     npx skills add AI-Answer/ask-samin --skill ask-samin-claude-club -g -a claude-code -y
+     npx skills add AI-Answer/ask-samin --skill ask-samin -g -a claude-code -y
      ```
-   - Claude.ai — zip: https://ask-samin-ochre.vercel.app/skills/ask-samin-claude-club.zip
+     Invoke with `/ask-samin`.
+   - Claude.ai — zip: https://ask-samin-ochre.vercel.app/skills/ask-samin.zip
 3. **Ask** — e.g. “Where does Samin cover trading?” → first sentence must be the Skool URL
 
-Repo skill docs: `skills/ask-samin-claude-club/README.md`
+Repo skill docs: `skills/ask-samin/README.md`
 
 Do not rely on members pasting custom instructions — distribute the skill (npx or zip).
 

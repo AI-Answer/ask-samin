@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Connect Ask Samin MCP and the Claude Club skill for Skool-linked answers."
 };
 
-const SKILL_INSTALL_CMD = `npx skills add AI-Answer/ask-samin --skill ask-samin-claude-club -g -a claude-code -y`;
+const SKILL_INSTALL_CMD = `npx skills add AI-Answer/ask-samin --skill ask-samin -g -a claude-code -y`;
 
 export default async function ConnectPage() {
   const requestHeaders = await headers();
@@ -18,7 +18,7 @@ export default async function ConnectPage() {
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host?.startsWith("localhost") ? "http" : "https");
   const appUrl = (configuredUrl || (host ? `${protocol}://${host}` : "http://localhost:3000")).replace(/\/$/, "");
   const mcpUrl = `${appUrl}/mcp`;
-  const skillZipUrl = `${appUrl}/skills/ask-samin-claude-club.zip`;
+  const skillZipUrl = `${appUrl}/skills/ask-samin.zip`;
 
   return (
     <main className="interior-page connect-page" id="main-content">
@@ -103,8 +103,8 @@ export default async function ConnectPage() {
             <p>
               <strong>Install skill</strong> — Devs: run the <code>npx skills add …</code> command above. Claude.ai:
               download{" "}
-              <a href="/skills/ask-samin-claude-club.zip">ask-samin-claude-club.zip</a>, then Settings → Capabilities →
-              Skills → upload/enable the folder.
+              <a href="/skills/ask-samin.zip">ask-samin.zip</a>, then Settings → Capabilities →
+              Skills → upload/enable the folder. Invoke with <code>/ask-samin</code>.
             </p>
           </li>
           <li>
@@ -230,8 +230,8 @@ export default async function ConnectPage() {
             Connecting only the MCP lets Claude search Claude Club content — it may still answer without pasting the
             Skool link. Installing the Claude Club skill is what gatekeeps “link in the first sentence.” Full skill
             README:{" "}
-            <a href="https://github.com/AI-Answer/ask-samin/tree/main/skills/ask-samin-claude-club" rel="noreferrer" target="_blank">
-              skills/ask-samin-claude-club<span className="sr-only">, opens in a new tab</span>
+            <a href="https://github.com/AI-Answer/ask-samin/tree/main/skills/ask-samin" rel="noreferrer" target="_blank">
+              skills/ask-samin<span className="sr-only">, opens in a new tab</span>
             </a>
             .
           </p>

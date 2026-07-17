@@ -1,5 +1,5 @@
 ---
-name: Claude Club (Ask Samin)
+name: Ask Samin
 description: >
   Answer Claude Club questions the way Samin Yasar teaches them. Use when the member
   asks how Samin approaches something, Claude Club / Skool lessons, Masterclass or

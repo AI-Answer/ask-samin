@@ -47,9 +47,11 @@ Exact file location depends on your Claude Code version — use the app’s “A
 
 #### Option 1 — one command (Claude Code, Cursor, Codex)
 
+Slash command after install: **`/ask-samin`**
+
 ```bash
 npx skills add AI-Answer/ask-samin \
-  --skill ask-samin-claude-club \
+  --skill ask-samin \
   -g \
   -a claude-code \
   -y
@@ -59,7 +61,7 @@ Also install for Cursor:
 
 ```bash
 npx skills add AI-Answer/ask-samin \
-  --skill ask-samin-claude-club \
+  --skill ask-samin \
   -g \
   -a cursor \
   -y
@@ -73,10 +75,10 @@ npx skills add AI-Answer/ask-samin --list
 
 #### Option 2 — zip (Claude.ai Skills UI)
 
-1. Download: [ask-samin-claude-club.zip](https://ask-samin-ochre.vercel.app/skills/ask-samin-claude-club.zip)
+1. Download: [ask-samin.zip](https://ask-samin-ochre.vercel.app/skills/ask-samin.zip)
 2. Claude → **Settings → Capabilities → Skills** → enable Skills
-3. Add / upload the unzipped `ask-samin-claude-club` folder
-4. Confirm the skill is enabled
+3. Add / upload the unzipped `ask-samin` folder
+4. Confirm the skill is enabled; invoke with `/ask-samin`
 
 ---
 
