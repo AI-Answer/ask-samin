@@ -50,7 +50,7 @@ Exact file location depends on your Claude Code version — use the app’s “A
 Slash command after install: **`/ask-samin`**
 
 ```bash
-npx skills add AI-Answer/ask-samin \
+npx skills add AI-Answer/ask-samin-skill \
   --skill ask-samin \
   -g \
   -a claude-code \
@@ -60,7 +60,7 @@ npx skills add AI-Answer/ask-samin \
 Also install for Cursor:
 
 ```bash
-npx skills add AI-Answer/ask-samin \
+npx skills add AI-Answer/ask-samin-skill \
   --skill ask-samin \
   -g \
   -a cursor \
@@ -70,7 +70,7 @@ npx skills add AI-Answer/ask-samin \
 List what’s in the repo:
 
 ```bash
-npx skills add AI-Answer/ask-samin --list
+npx skills add AI-Answer/ask-samin-skill --list
 ```
 
 #### Option 2 — zip (Claude.ai Skills UI)

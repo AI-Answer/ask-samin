@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Connect Ask Samin MCP and the Claude Club skill for Skool-linked answers."
 };
 
-const SKILL_INSTALL_CMD = `npx skills add AI-Answer/ask-samin --skill ask-samin -g -a claude-code -y`;
+const SKILL_INSTALL_CMD = `npx skills add AI-Answer/ask-samin-skill --skill ask-samin -g -a claude-code -y`;
 
 export default async function ConnectPage() {
   const requestHeaders = await headers();
@@ -230,8 +230,8 @@ export default async function ConnectPage() {
             Connecting only the MCP lets Claude search Claude Club content — it may still answer without pasting the
             Skool link. Installing the Claude Club skill is what gatekeeps “link in the first sentence.” Full skill
             README:{" "}
-            <a href="https://github.com/AI-Answer/ask-samin/tree/main/skills/ask-samin" rel="noreferrer" target="_blank">
-              skills/ask-samin<span className="sr-only">, opens in a new tab</span>
+            <a href="https://github.com/AI-Answer/ask-samin-skill" rel="noreferrer" target="_blank">
+              AI-Answer/ask-samin-skill<span className="sr-only">, opens in a new tab</span>
             </a>
             .
           </p>
