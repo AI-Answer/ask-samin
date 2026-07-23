@@ -13,6 +13,16 @@ export const lessonSchema = z.object({
   publish: z.boolean().optional(),
   groupSlug: z.string().trim().max(100).optional(),
   courseId: z.string().trim().max(100).optional(),
+  sourceType: z
+    .enum([
+      "lesson_page",
+      "community_post",
+      "call_recording",
+      "video",
+      "curator_note",
+      "resource_link"
+    ])
+    .optional(),
   pageKind: z
     .enum(["lesson_page", "skill_card", "asset_pointer", "prompt_playbook", "concept_lesson"])
     .optional(),

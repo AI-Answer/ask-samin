@@ -1,5 +1,6 @@
--- Fix chunk writes via PostgREST (vector ops schema + service_role grants).
-GRANT USAGE ON SCHEMA bookedindev TO service_role;
+-- Fix chunk writes via PostgREST (vector ops schema + role grants).
+-- anon/authenticated need USAGE so search RPCs can cast query_embedding to bookedindev.vector.
+GRANT USAGE ON SCHEMA bookedindev TO anon, authenticated, service_role;
 
 CREATE OR REPLACE FUNCTION community_knowledge.replace_source_chunks(
   p_source_id text,

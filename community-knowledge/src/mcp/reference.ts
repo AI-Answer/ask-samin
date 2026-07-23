@@ -61,11 +61,18 @@ export function pickBestResultPerSource(results: SearchResult[], limit?: number)
   return typeof limit === "number" ? sorted.slice(0, limit) : sorted;
 }
 
-/** Light quality boosts only — no Club-structure heuristics (Resources vs lesson, course names). */
+/** Light quality boosts/demotions — no Club-structure course heuristics. */
 export function clubSortScore(result: SearchResult): number {
   let score = result.score;
   if (result.pageKind === "skill_card" || result.pageKind === "concept_lesson") {
     score *= 1.08;
+  }
+  if (result.pageKind === "asset_pointer") {
+    score *= 0.72;
+  }
+  // Resources/link pages are real but should not outrank the lesson/video that teaches the thing.
+  if (/resources/i.test(result.sourceTitle)) {
+    score *= 0.45;
   }
   if (typeof result.startMs === "number") {
     score *= 1.05;

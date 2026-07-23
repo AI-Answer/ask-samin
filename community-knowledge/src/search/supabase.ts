@@ -1,3 +1,4 @@
+import { applyCallGlossary } from "../calls/glossary";
 import { createQueryEmbedding, logQueryUsage, rpcSearchCommunityChunks } from "../embed";
 import type { SearchResult, SourceType } from "../types";
 import { rankedToSearchResults, type RankedChunk } from "./local";
@@ -52,9 +53,11 @@ export async function searchSupabase(
     clientIpHash?: string;
   }
 ): Promise<SearchResult[] | null> {
-  const embedding = await createQueryEmbedding(query);
+  // Club ASR / product glossary at query time (same map as call ingest).
+  const normalizedQuery = applyCallGlossary(query).text;
+  const embedding = await createQueryEmbedding(normalizedQuery);
   const rows = await rpcSearchCommunityChunks({
-    queryText: query,
+    queryText: normalizedQuery,
     queryEmbedding: embedding,
     matchCount: options.limit,
     filterSourceType: options.sourceType,

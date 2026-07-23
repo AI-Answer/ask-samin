@@ -46,13 +46,44 @@ function parseEmbedding(payload: unknown): number[] | null {
   return candidate as number[];
 }
 
+async function createOpenRouterEmbedding(query: string): Promise<number[] | null> {
+  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+  if (!apiKey) return null;
+
+  const model =
+    process.env.OPENROUTER_EMBED_MODEL?.trim() || "openai/text-embedding-3-small";
+  const response = await fetch("https://openrouter.ai/api/v1/embeddings", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "https://ask-samin-ochre.vercel.app",
+      "X-Title": "Ask Samin embeddings"
+    },
+    body: JSON.stringify({
+      model,
+      input: query.slice(0, 8_000),
+      dimensions: 384
+    })
+  });
+  if (!response.ok) return null;
+  const payload = (await response.json()) as { data?: Array<{ embedding?: unknown }> };
+  return parseEmbedding(payload.data?.[0] ?? null);
+}
+
 async function createQueryEmbedding(
   client: SupabaseClient,
   query: string
 ): Promise<number[] | null> {
-  const { data, error } = await client.functions.invoke("gte-small", {
-    body: { input: query }
-  });
+  if (process.env.OPENROUTER_API_KEY?.trim()) {
+    const fromOpenRouter = await createOpenRouterEmbedding(query);
+    if (fromOpenRouter) return fromOpenRouter;
+  }
+
+  const { data, error } = await client.functions.invoke(
+    process.env.EMBED_FUNCTION_NAME ?? "gte-small",
+    { body: { input: query } }
+  );
   if (error) return null;
   return parseEmbedding(data);
 }

@@ -13,7 +13,8 @@
     "qa": "npm run lint && npm run typecheck && npm run test && node scripts/qa-content.mjs",
     "catalog:build": "node scripts/build-catalog.mjs",
     "ingest:exports": "python3 scripts/ingest-transcript-exports.py",
-    "ingest:skool": "tsx scripts/ingest-skool-export.ts"
+    "ingest:skool": "tsx scripts/ingest-skool-export.ts",
+    "enrich:call": "tsx scripts/enrich-call-transcript.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.26.0",

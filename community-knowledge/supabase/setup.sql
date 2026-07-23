@@ -252,13 +252,45 @@ as $body$
   full_text as (
     select c.id,
            row_number() over (
-             order by ts_rank_cd(c.search_vector, b.text_query) desc, c.id
+             order by (
+               coalesce(ts_rank_cd(c.search_vector, b.text_query), 0)
+               + case
+                   when b.text_query @@ to_tsvector('english', coalesce(s.title, ''))
+                   then 1.0 else 0
+                 end
+               + case
+                   when b.text_query @@ to_tsvector(
+                     'english',
+                     coalesce(array_to_string(s.curriculum_path, ' '), '')
+                   )
+                   then 0.25 else 0
+                 end
+             ) desc,
+             c.id
            ) as rank
     from community_knowledge.chunks c
     join eligible_sources s on s.id = c.source_id
     cross join bounded b
     where b.text_query @@ c.search_vector
-    order by ts_rank_cd(c.search_vector, b.text_query) desc, c.id
+       or b.text_query @@ to_tsvector('english', coalesce(s.title, ''))
+       or b.text_query @@ to_tsvector(
+            'english',
+            coalesce(array_to_string(s.curriculum_path, ' '), '')
+          )
+    order by (
+      coalesce(ts_rank_cd(c.search_vector, b.text_query), 0)
+      + case
+          when b.text_query @@ to_tsvector('english', coalesce(s.title, ''))
+          then 1.0 else 0
+        end
+      + case
+          when b.text_query @@ to_tsvector(
+            'english',
+            coalesce(array_to_string(s.curriculum_path, ' '), '')
+          )
+          then 0.25 else 0
+        end
+    ) desc, c.id
     limit least(200, greatest(4, match_count * 4))
   ),
   semantic as (
@@ -493,6 +525,8 @@ to anon, authenticated
 using (true);
 
 grant usage on schema community_knowledge to anon, authenticated, service_role;
+-- vector type lives in bookedindev on this project; search RPCs cast to it.
+grant usage on schema bookedindev to anon, authenticated, service_role;
 grant select on community_knowledge.sources, community_knowledge.chunks, community_knowledge.curriculum_nodes
   to anon, authenticated;
 grant all on all tables in schema community_knowledge to service_role;

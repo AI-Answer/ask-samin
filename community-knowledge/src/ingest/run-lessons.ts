@@ -26,6 +26,7 @@ export interface LessonExport {
   publish?: boolean;
   groupSlug?: string;
   courseId?: string;
+  sourceType?: import("../types").SourceType;
   pageKind?: import("../types").PageKind;
   pageType?: string;
   summary?: string;
@@ -81,6 +82,7 @@ export async function ingestLessons(
         html: lesson.html,
         markdown: lesson.markdown,
         transcript: lesson.transcript,
+        sourceType: lesson.sourceType,
         videoLink: lesson.videoLink,
         videoId: lesson.videoId,
         pageKind: lesson.pageKind,
