@@ -190,9 +190,9 @@ export const communityMcpHandler = createMcpHandler(
     );
   },
   {
-    serverInfo: { name: "ask-samin", version: "1.0.0" },
+    serverInfo: { name: "Ask-Samin", version: "1.0.0" },
     instructions:
-      "Ask Samin retrieves Samin Yasar's Claude Club (Skool) lessons across whatever courses are indexed. Return urls, paths, and timestamps so the Claude Club skill can credit Samin and link to Skool. Do not invent Claude Club structure rules."
+      "Ask-Samin retrieves Samin Yasar's Claude Club (Skool) lessons across whatever courses are indexed. Return urls, paths, and timestamps so the Claude Club skill can credit Samin and link to Skool. Do not invent Claude Club structure rules."
   },
   { maxDuration: 60, verboseLogs: false, disableSse: true, streamableHttpEndpoint: "/mcp" }
 );

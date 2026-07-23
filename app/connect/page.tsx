@@ -6,7 +6,7 @@ import { CopyButton } from "@/components/copy-button";
 
 export const metadata: Metadata = {
   title: "Connect your AI",
-  description: "Connect Ask Samin MCP and the Claude Club skill for Skool-linked answers."
+  description: "Connect Ask-Samin MCP and the Claude Club skill for Skool-linked answers."
 };
 
 const SKILL_INSTALL_CMD = `npx skills add AI-Answer/ask-samin-skill --skill ask-samin -g -a claude-code -y`;
@@ -29,7 +29,7 @@ export default async function ConnectPage() {
         </div>
         <div className="intro-aside">
           <p>
-            Connect the Ask Samin library to Claude or ChatGPT. For Claude Club, pair the MCP (retrieval) with the Claude
+            Connect the Ask-Samin library to Claude or ChatGPT. For Claude Club, pair the MCP (retrieval) with the Claude
             Club skill (always open with Samin’s Skool link).
           </p>
           <Link className="intro-link" href="/">
@@ -87,7 +87,7 @@ export default async function ConnectPage() {
           <div>
             <span className="eyebrow">Full setup</span>
             <h2 id="claude-heading">Connect MCP, install skill, then ask.</h2>
-            <p>Do this once. New chats need the Ask Samin connector enabled.</p>
+            <p>Do this once. New chats need the Ask-Samin connector enabled.</p>
           </div>
         </div>
         <ol>
@@ -95,7 +95,7 @@ export default async function ConnectPage() {
             <span>01</span>
             <p>
               <strong>Connect MCP</strong> — Customize → Connectors → Add custom connector → name{" "}
-              <code>Ask Samin</code> → paste <code>{mcpUrl}</code> → Add. In a chat: + → Connectors → enable Ask Samin.
+              <code>Ask-Samin</code> → paste <code>{mcpUrl}</code> → Add. In a chat: + → Connectors → enable Ask-Samin.
             </p>
           </li>
           <li>
@@ -172,7 +172,7 @@ export default async function ConnectPage() {
               <span>03</span>
               <div>
                 <h3>Use it in chat</h3>
-                <p>Select the Ask Samin app from + → More, then ask for the lesson or timestamp you need.</p>
+                <p>Select the Ask-Samin app from + → More, then ask for the lesson or timestamp you need.</p>
               </div>
             </li>
           </ol>

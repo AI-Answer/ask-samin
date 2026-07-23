@@ -5,6 +5,7 @@ export const CALL_TOOL_ALLOWLIST = [
   "Claude Code",
   "Claude Club",
   "Claude Cowork",
+  "Ask-Samin",
   "Ask Samin",
   "Samin",
   "MCP",

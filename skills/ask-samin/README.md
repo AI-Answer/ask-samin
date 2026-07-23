@@ -1,6 +1,6 @@
-# Ask Samin — Claude Club skill
+# Ask-Samin — Claude Club skill
 
-Teaches Claude to answer with **Samin Yasar’s approach in Claude Club**: always open with the Skool https link, credit Samin, then summarize from Ask Samin evidence.
+Teaches Claude to answer with **Samin Yasar’s approach in Claude Club**: always open with the Skool https link, credit Samin, then summarize from Ask-Samin evidence.
 
 | Layer | Job |
 |--------|-----|
@@ -17,14 +17,14 @@ Teaches Claude to answer with **Samin Yasar’s approach in Claude Club**: alway
 
 1. Open **Customize → Connectors**
 2. **+ → Add custom connector**
-3. Name: `Ask Samin`
+3. Name: `Ask-Samin`
 4. URL:
 
 ```text
 https://ask-samin-ochre.vercel.app/mcp
 ```
 
-5. **Add**, then in a chat: **+ → Connectors** → enable **Ask Samin**
+5. **Add**, then in a chat: **+ → Connectors** → enable **Ask-Samin**
 
 Team / Enterprise: an Owner adds the connector in org settings first; members then enable it.
 
@@ -33,7 +33,7 @@ Team / Enterprise: an Owner adds the connector in org settings first; members th
 ```json
 {
   "mcpServers": {
-    "ask-samin": {
+    "Ask-Samin": {
       "type": "http",
       "url": "https://ask-samin-ochre.vercel.app/mcp"
     }
@@ -85,7 +85,7 @@ npx skills add AI-Answer/ask-samin-skill --list
 ## How to retrieve answers
 
 1. Start a **new chat**
-2. Enable **Ask Samin** (MCP) for that chat
+2. Enable **Ask-Samin** (MCP) for that chat
 3. Ask in plain language, for example:
 
 | You ask | What should happen |
@@ -116,7 +116,7 @@ Related: [other title](https://www.skool.com/...) — when other hits are useful
 - **Pass:** first sentence is markdown `[title](https://www.skool.com/claude/...)` with a real https URL
 - **Fail:** title-only (“Here’s the lesson: 📝 … — Day 15”) with no `https://www.skool.com/...`
 
-If Ask Samin tools are missing, Claude should tell you to connect the MCP — not invent Claude Club content.
+If Ask-Samin tools are missing, Claude should tell you to connect the MCP — not invent Claude Club content.
 
 ---
 
